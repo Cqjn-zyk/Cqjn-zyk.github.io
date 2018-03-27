@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>grep命令详解 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="grep命令详解"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2017-03-01T07:53:24.000Z"><a href="/2017/03/01/Linux/命令/grep命令详解/">2017-03-01</a></time>
+        
+  
+    <h1 class="title">grep命令详解</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#描述"><span class="toc-number">1.</span> <span class="toc-text">描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#选项"><span class="toc-number">2.</span> <span class="toc-text">选项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实例"><span class="toc-number">3.</span> <span class="toc-text">实例</span></a></li></ol>
+    </div>
+
+        <h4 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h4><p>Grep 搜索以 FILE 命名的文件输入 (或者是标准输入，如果没有指定文件名，或者给出的文件名是        -   的话)，寻找含有与给定的模式PATTERN相匹配的内容的行。默认情况下，grep将把含有匹配内容的行打印出来。另外，也可以使用两个变种程序 egrep 和 fgrep 。 Egrep 与 grep -E 相同。 Fgrep 与 grep -F        相同。<br><a id="more"></a></p>
+<h4 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h4><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">A NUM, --after-context=NUM</span></span><br><span class="line"><span class="ruby">       打印出紧随匹配的行之后的下文 NUM 行。在相邻的匹配组之间将会打印内容是 -- 的一行。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-a, --text</span></span><br><span class="line"><span class="ruby">       将一个二进制文件视为一个文本文件来处理；它与 --binary-files=text 选项等价。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-B NUM, --before-context=NUM</span></span><br><span class="line"><span class="ruby">       打印出匹配的行之前的上文 NUM 行。在相邻的匹配组之间将会打印内容是 -- 的一行。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-C NUM, --context=NUM</span></span><br><span class="line"><span class="ruby">       打印出匹配的行的上下文前后各 NUM 行。在相邻的匹配组之间将会打印内容是 -- 的一行。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-b, --byte-offset</span></span><br><span class="line"><span class="ruby">       在输出的每行前面同时打印出当前行在输入文件中的字节偏移量。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">--binary-files=TYPE</span></span><br><span class="line"><span class="ruby">       如果一个文件的起始几个字节表明文件包含二进制数据，那么假定文件是  TYPE  类型的。默认情况下，  TYPE 是 binary ，并且 grep 一般会输出一个一行的消息说一个二进制文件匹配，或者如果没有匹配的话就没有消息输出。如果类型 TYPE 是</span></span><br><span class="line"><span class="ruby">       without-match  ，那么  grep  假定二进制文件不会匹配；这样做与  -I  选项等价。如果类型   TYPE   是   text   ，那么   grep   将一个二进制文件视为文本文件来处理；它与   -a   选项等价。   警告：   grep   --binary-files=text</span></span><br><span class="line"><span class="ruby">       可能会输出二进制的无用内容。如果输出设备是一个终端，并且终端的驱动将这些输出中的一些当作命令，可能会带来恶劣的副作用。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">--colour[=WHEN], --color[=WHEN]</span></span><br><span class="line"><span class="ruby">       在匹配的行周围以 GREP_COLOR 环境变量中指定的记号来标记。WHEN 可以是 <span class="string">`never', `</span>always<span class="string">', 或是 `auto'</span>。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-c, --count</span></span><br><span class="line"><span class="ruby">       禁止通常的输出；作为替代，为每一个输入文件打印一个匹配的行的总数。如果使用 -v, --invert-match 选项 (参见下面)，将是不匹配的行的总数。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-D ACTION, --devices=ACTION</span></span><br><span class="line"><span class="ruby">       如果输入文件是一个设备，FIFO 或是套接字 (socket) ，使用动作 ACTION 来处理它。默认情况下，动作 ACTION 是 read ，意味着设备将视为普通文件那样来读。如果动作 ACTION 是 skip ，将不处理而直接跳过设备。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-d ACTION, --directories=ACTION</span></span><br><span class="line"><span class="ruby">       如果输入文件是一个目录，使用动作   ACTION   来处理它。默认情况下，动作  ACTION  是  read  ，意味着目录将视为普通文件那样来读。如果动作  ACTION  是  skip  ，将不处理而直接跳过目录。如果动作  ACTION  是  recurse  ，  grep</span></span><br><span class="line"><span class="ruby">       将递归地读每一目录下的所有文件。这样做和 -r 选项等价。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-E, --extended-regexp</span></span><br><span class="line"><span class="ruby">       将模式 PATTERN 作为一个扩展的正则表达式来解释 (参见下面)。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-e PATTERN, --regexp=PATTERN</span></span><br><span class="line"><span class="ruby">       使用模式 PATTERN 作为模式；在保护以 - 为起始的模式时有用。</span></span><br><span class="line"><span class="ruby"> </span></span><br><span class="line"><span class="ruby">       -F, --fixed-strings</span></span><br><span class="line"><span class="ruby">       将模式 PATTERN 视为一个固定的字符串的列表，用新行 (newlines) 分隔，只要匹配其中之一即可。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-P, --perl-regexp</span></span><br><span class="line"><span class="ruby">       将模式 PATTERN 作为一个 Perl 正则表达式来解释。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-f FILE, --file=FILE</span></span><br><span class="line"><span class="ruby">       从文件 FILE 中获取模式，每行一个。空文件含有<span class="number">0</span>个模式，因此不匹配任何东西。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-G, --basic-regexp</span></span><br><span class="line"><span class="ruby">       将模式 PATTERN 作为一个基本的正则表达式 (参见下面) 来解释。这是默认值。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-H, --with-filename</span></span><br><span class="line"><span class="ruby">       为每个匹配打印文件名。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-h, --no-filename</span></span><br><span class="line"><span class="ruby">       当搜索多个文件时，禁止在输出的前面加上文件名前缀。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">--help 输出一个简短的帮助信息。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-I     处理一个二进制文件，但是认为它不包含匹配的内容。这和 --binary-files=without-match 选项等价。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-i, --ignore-<span class="keyword">case</span></span></span><br><span class="line"><span class="ruby">       忽略模式 PATTERN 和输入文件中的大小写的分别。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-L, --files-without-match</span></span><br><span class="line"><span class="ruby">       禁止通常的输出；作为替代，打印出每个在通常情况下不会产生输出的输入文件的名字。对每个文件的扫描在遇到第一个匹配的时候就会停止。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-l, --files-with-matches</span></span><br><span class="line"><span class="ruby">       禁止通常的输出；作为替代，打印出每个在通常情况下会产生输出的输入文件的名字。对每个文件的扫描在遇到第一个匹配的时候就会停止。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-m NUM, --max-count=NUM</span></span><br><span class="line"><span class="ruby">       在找到NUM个匹配的行之后，不再读这个文件。如果输入是来自一个普通文件的标准输入，并且已经输出了NUM 个匹配的行，grep保证标准输入被定位于退出时的最后一次匹配的行之后，不管是否指定了要输出紧随的下文的行。这样可以使一个调用程序恢复搜索。当  grep  在  NUM 个匹配的行之后停止，它会输出任何紧随的下文的行。当使用了 -c 或 --count 选项的时候，</span></span><br><span class="line"><span class="ruby">       grep 不会输出比 NUM 更多的行。当指定了 -v 或 --invert-match 选项的时候， grep 会在输出 NUM 个不匹配的行之后停止。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">--mmap 如果可能的话，使用  mmap(<span class="number">2</span>)  系统调用来读取输入，而不是默认的  read(<span class="number">2</span>)  系统调用。在一些情况下，  --mmap  提供较好的性能。但是，如果一个输入文件在  grep  正在操作时大小发生变化，或者如果发生了一个  I/O   错误，   --mmap</span></span><br><span class="line"><span class="ruby">       可能导致不可知的行为 (包括core dumps)。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-n, --line-number</span></span><br><span class="line"><span class="ruby">       在输出的每行前面加上它所在的文件中它的行号。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-o, --only-matching</span></span><br><span class="line"><span class="ruby">       只显示匹配的行中与 PATTERN 相匹配的部分。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">--label=LABEL</span></span><br><span class="line"><span class="ruby">       将实际上来自标准输入的输入视为来自输入文件 LABEL 。这对于 zgrep 这样的工具非常有用，例如： gzip -cd foo.gz <span class="params">|grep --label=foo something</span></span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">--line-buffering</span></span><br><span class="line"><span class="ruby">       使用行缓冲，it can be a performance penality.</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-q, --quiet, --silent</span></span><br><span class="line"><span class="ruby">       安静。不向标准输出写任何东西。如果找到任何匹配的内容就立即以状态值 <span class="number">0</span> 退出，即使检测到了错误。 参见 -s 或 --no-messages 选项。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-R, -r, --recursive</span></span><br><span class="line"><span class="ruby">       递归地读每一目录下的所有文件。这样做和 -d recurse 选项等价。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">  --<span class="keyword">include</span>=PATTERN</span></span><br><span class="line"><span class="ruby">       仅仅在搜索匹配 PATTERN 的文件时在目录中递归搜索。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">  --exclude=PATTERN</span></span><br><span class="line"><span class="ruby">       在目录中递归搜索，但是跳过匹配 PATTERN 的文件。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-s, --no-messages</span></span><br><span class="line"><span class="ruby">       禁止输出关于文件不存在或不可读的错误信息。  对于可移植性需要注意：与  GNU grep 不同，传统的 grep 不遵守 POSIX.<span class="number">2</span> 规范，因为传统的 grep 缺少一个 -q 选项，而它的 -s 选项与 GNU grep 的 -q 选项行为相似。需要可移植到传统 grep</span></span><br><span class="line"><span class="ruby">       的 shell 脚本应当避免使用 -q 和 -s 选项，而应当将输出重定向到 /dev/null 。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-U, --binary</span></span><br><span class="line"><span class="ruby">       将文件视为二进制。默认情况下，在  MS-DOS  和  MS-Windows  系统中，  grep  通过从文件中读取头部的  <span class="number">32</span>kB  内容来判断它的文件类型。如果  grep  判断文件是一个文本文件，它将原始文件内容中的  CR  字符去除  (使得含有  ^  和  $</span></span><br><span class="line"><span class="ruby">       的正则表达式可以正常工作)。指定 -U 将不进行这些工作，而使所有文件保持不变地读取并传递给匹配机制。如果文件是一个以 CR/LF 换行的文本文件，这样作将导致一些正则表达式失败。这个选项在 MS-DOS 和 MS-Windows 之外的系统中无效。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-u, --unix-byte-offsets</span></span><br><span class="line"><span class="ruby">       报告   Unix   风格的字节偏移量。这个开关使得   grep   报告字节偏移量时，将文件作为   Unix   风格的文本文件看待，也就是说将   CR   字符去掉。这将产生与在一台   Unix   主机上运行   grep   完全相同的结果。除非同时使用   -b</span></span><br><span class="line"><span class="ruby">       选项，否则这个选项无效。这个选项在 MS-DOS 和 MS-Windows 之外的系统中无效。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-V, --version</span></span><br><span class="line"><span class="ruby">       向标准错误输出打印 grep 的版本号。版本号应当包含在所有的 bug 报告中 (参见下面)。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-v, --invert-match</span></span><br><span class="line"><span class="ruby">       改变匹配的意义，只选择不匹配的行。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-w, --word-regexp</span></span><br><span class="line"><span class="ruby">       只选择含有能组成完整的词的匹配的行。判断方法是匹配的子字符串必须是一行的开始，或者是在一个不可能是词的组成的字符之后。与此相似，它必须是一行的结束，或者是在一个不可能是词的组成的字符之前。词的组成字符是字母，数字，还有下划线</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-x, --line-regexp</span></span><br><span class="line"><span class="ruby">       只选择能匹配完整一行的匹配。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-y     -i 的同义词，废弃不用。</span></span><br><span class="line"><span class="ruby"></span></span><br><span class="line"><span class="ruby">-Z, --null</span></span><br><span class="line"><span class="ruby">       输出一个全零字节                   (ASCII                   码中的                   NUL                   字符)                  而不是一般情况下输出在文件名之后的字符。例如，                  grep                  -lZ</span></span><br><span class="line"><span class="ruby">       在每个文件名之后输出一个全零字节而不是普通的新行符。这个选项使得输出清楚明白，即使文件名的表示中包含特殊字符比如新行符。这个选项可以与命令     find     -print<span class="number">0</span>,     perl     -<span class="number">0</span>,     sort     -z,     和     xargs      -<span class="number">0</span></span></span><br><span class="line"><span class="ruby">       一起使用，来处理任意的文件名，即使是那些含有新行符的文件名。</span></span><br></pre></td></tr></table></figure>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><ul>
+<li>在当前目录递归查找不区分大小写递归查找某个字符串<pre><code>grep -inr &quot;somewords&quot; ./
+</code></pre></li>
+<li>在当前目录递归查找包含A和B<pre><code>grep -Einr &quot;A|B&quot;
+</code></pre></li>
+<li>在当前目录查找不包含某个字符串的文件<pre><code>grep -L &quot;Noword&quot; *
+</code></pre></li>
+</ul>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2017/03/01/Linux/命令/grep命令详解/" target="_blank" title="grep命令详解">砦龑堃</a></b>及出处<b><a href="/2017/03/01/Linux/命令/grep命令详解/" target="_blank" title="grep命令详解">http://ykzhai.top/2017/03/01/Linux/命令/grep命令详解/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《grep命令详解》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Linux/">Linux</a>, <a href="/categories/Linux/命令/">命令</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/原创/">原创</a>, <a href="/tags/Linux/">Linux</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2017/03/01/Linux/命令/grep命令详解/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "grep命令详解"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

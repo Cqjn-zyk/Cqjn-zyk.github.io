@@ -1,0 +1,804 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>我的hexo博客搭建之路 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="我的hexo博客搭建之路"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2017-02-09T11:42:36.000Z"><a href="/2017/02/09/领域/hexo/我的hexo博客搭建之路/">2017-02-09</a></time>
+        
+  
+    <h1 class="title">我的hexo博客搭建之路</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo-简介"><span class="toc-number">2.</span> <span class="toc-text">hexo 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo是什么？"><span class="toc-number">2.1.</span> <span class="toc-text">hexo是什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#特点"><span class="toc-number">2.2.</span> <span class="toc-text">特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo安装"><span class="toc-number">3.</span> <span class="toc-text">hexo安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#使用淘宝镜像源"><span class="toc-number">3.1.</span> <span class="toc-text">使用淘宝镜像源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo-快速开始"><span class="toc-number">4.</span> <span class="toc-text">hexo 快速开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo-初始化"><span class="toc-number">4.1.</span> <span class="toc-text">hexo 初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新建第一篇博客"><span class="toc-number">4.2.</span> <span class="toc-text">新建第一篇博客</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo-简单配置"><span class="toc-number">5.</span> <span class="toc-text">hexo 简单配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#静态网站托管服务"><span class="toc-number">5.1.</span> <span class="toc-text">静态网站托管服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#config-yml中的相关配置"><span class="toc-number">5.2.</span> <span class="toc-text">_config.yml中的相关配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#发布相关配置"><span class="toc-number">5.2.1.</span> <span class="toc-text">发布相关配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#站点信息设置"><span class="toc-number">5.2.2.</span> <span class="toc-text">站点信息设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#目录设置"><span class="toc-number">5.2.3.</span> <span class="toc-text">目录设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文章相关"><span class="toc-number">5.2.4.</span> <span class="toc-text">文章相关</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分类-amp-标签-amp-日期-amp-时间-amp-分页-amp-扩展"><span class="toc-number">5.2.5.</span> <span class="toc-text">分类&amp;标签&amp;日期&amp;时间&amp;分页&amp;扩展</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo-命令"><span class="toc-number">6.</span> <span class="toc-text">hexo 命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后的话"><span class="toc-number">7.</span> <span class="toc-text">最后的话</span></a></li></ol>
+    </div>
+
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>很早就想有一个自己的博客了，其实好多平台都可以去写，但是用了几个发现都不怎么满意，感觉最符合我口味的应该是简书了吧，简洁而又不失优雅，不过这些平台所提供的博客可定制度都不高，就想自己搭建一个独立博客，经朋友介绍，知道了hexo这个博客框架，看了一些别人使用这个框架所搭建的博客，感觉挺不错的，于是去年8月份的时候，在朋友的帮助下，搭建了一个属于<a href="http://ykzhai.top">我的独立博客</a>。</p>
+<a id="more"></a>
+<h2 id="hexo-简介"><a href="#hexo-简介" class="headerlink" title="hexo 简介"></a>hexo 简介</h2><h3 id="hexo是什么？"><a href="#hexo是什么？" class="headerlink" title="hexo是什么？"></a>hexo是什么？</h3><p>hexo 是一个免费的基于Nodejs技术的开源博客框架，<a href="https://hexo.io" target="_blank" rel="noopener">官网网址</a>,<a href="https://github.com/hexojs/hexo" target="_blank" rel="noopener">github链接</a>,据说作者是一位来自台湾的大学生,Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。我采用的版本是目前的最新版，版本号为3.2.2。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>速度超快，Nodejs带来超快生成速度</li>
+<li>一键部署，只需要一条指令即可部署到GitHub ，Coding 等网站</li>
+<li>支持Markdown</li>
+<li>丰富的插件</li>
+<li>主题多种多样，牛X了可以自己定制和制作喜欢的主题</li>
+</ul>
+<p>总之，一句话，快速，简洁且高效！</p>
+<h2 id="hexo安装"><a href="#hexo安装" class="headerlink" title="hexo安装"></a>hexo安装</h2><p>由于hexo基于Nodejs技术来生成渲染页面，因此首先要保证电脑有<a href="https://nodejs.org/en/" target="_blank" rel="noopener">NodeJs</a>这个软件，另外需要使用git来将本地生成的页面文档push到GitHub等类似的网站，所以还要安装<a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a>，一般安装前面两个软件就可以了，hexo有一个默认主题，但是一般都会去下载安装其他比较喜欢的主题，另外有些主题的某些功能可能会需要一些插件.可以根据需要来进行安装。</p>
+<ul>
+<li>安装Nodejs</li>
+<li>安装Git 官网可能比较慢，可以用这个<a href="https://github.com/waylau/git-for-win" target="_blank" rel="noopener">https://github.com/waylau/git-for-win</a></li>
+<li>根据需要安装一些插件 可选</li>
+<li>安装喜欢的主题 可选</li>
+</ul>
+<p>当安装完上面的软件后，打开终端执行下面的指令来安装hexo<br><figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-<span class="keyword">cli</span></span><br></pre></td></tr></table></figure></p>
+<p>npm 是随同Nodejs一起安装的包管理工具，能够很方便的安装NodeJs的模块，上面的指令安装了hexo模块。</p>
+<h3 id="使用淘宝镜像源"><a href="#使用淘宝镜像源" class="headerlink" title="使用淘宝镜像源"></a>使用淘宝镜像源</h3><p><strong>另外由于某些原因，从官网上下载安装一些模块可能比较慢，或者根本就会安装失败，遇到这种情况，可以选择从<a href="http://npm.taobao.org" target="_blank" rel="noopener">淘宝镜像</a>来进行安装。</strong><br>使用淘宝镜像源的方法很简单，首先执行下面指令：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">npm</span> install -g cnpm --registry=https:<span class="regexp">//</span>registry.<span class="built_in">npm</span>.taobao.org</span><br></pre></td></tr></table></figure></p>
+<p>安装完成后就可以使用cnpm来代替npm了，此时使用cnpm安装模块时所用的源就是淘宝镜像源了，相比官方源速度快了不止多少倍。</p>
+<h2 id="hexo-快速开始"><a href="#hexo-快速开始" class="headerlink" title="hexo 快速开始"></a>hexo 快速开始</h2><h3 id="hexo-初始化"><a href="#hexo-初始化" class="headerlink" title="hexo 初始化"></a>hexo 初始化</h3><p>当安装hexo完成后，执行下列命令，hexo将会在指定位置生成所需文件夹<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init 文件夹名</span><br><span class="line"><span class="built_in">cd</span> 文件夹名</span><br><span class="line">npm (cnpm) install</span><br></pre></td></tr></table></figure></p>
+<p>完成上述命令后，会在指定文件夹中生成所需文件，列表如下：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">|<span class="string">--- _config.yml</span></span><br><span class="line">|<span class="string">--- package.json</span></span><br><span class="line">|<span class="string">--- node_modules</span></span><br><span class="line">|<span class="string">--- scaffolds</span></span><br><span class="line">|<span class="string">--- source </span></span><br><span class="line">|<span class="string">	</span>|<span class="string">--- _drafts</span></span><br><span class="line">|<span class="string">	</span>|<span class="string">--- _posts</span></span><br><span class="line">|</span><br><span class="line">|<span class="string">---themes</span></span><br></pre></td></tr></table></figure></p>
+<p>各个文件（夹）的作用如下：</p>
+<ul>
+<li>_config.yml 全局的配置文件，会作用于所有的主题，重要，需要进行配置</li>
+<li>package.json hexo 所安装的插件信息，列出了所安装的hexo插件</li>
+<li>node_modules 所安装的NodeJs 程序</li>
+<li>scaffolds  模板文件夹</li>
+<li>source  源文件目录，我们所写的markdown 文档都放在这个目录<ul>
+<li>_drafts 草稿目录</li>
+<li>_posts  所发布文章目录</li>
+</ul>
+</li>
+<li>themes 主题目录，安装（下载）的主题要放在这个目录，hexo根据主题来生成静态页面</li>
+</ul>
+<h3 id="新建第一篇博客"><a href="#新建第一篇博客" class="headerlink" title="新建第一篇博客"></a>新建第一篇博客</h3><p>执行下面的命令新建第一篇文章<br><figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="keyword">new</span>  <span class="type"></span>第一篇文章</span><br></pre></td></tr></table></figure></p>
+<p>生成静态页面文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></table></figure></p>
+<p>启动本地服务预览<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
+<p>好了，就是这么简单，现在可以去浏览器中打开<a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a> 来预览了，不出意外的话你可一看到下面的页面：<br><img src="我的hexo博客搭建之路/1.png" alt="hexo 预览"><br>上面生成的页面所用的主题就是hexo博客系统的默认主题，如果不喜欢，我们可以自己来更换。更换主题的事后面再说，现在再来看下博客目录我们会发现多出来了一个public 目录，这个目录里面所存放的就是根据主题和我们所写的文章来生成的静态文档，现在虽然我们可以在本地进行预览了，但是别人还是没办法访问的，下面我们来解决这个问题。</p>
+<h2 id="hexo-简单配置"><a href="#hexo-简单配置" class="headerlink" title="hexo 简单配置"></a>hexo 简单配置</h2><p>如前文所说，博客根目录下的_config.yml文件为网站的配置文件，刚刚生成的配置文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"># Hexo Configuration</span><br><span class="line">## Docs: https://hexo.io/docs/configuration.html</span><br><span class="line">## Source: https://github.com/hexojs/hexo/</span><br><span class="line"></span><br><span class="line"># Site</span><br><span class="line">title: Hexo</span><br><span class="line">subtitle:</span><br><span class="line">description:</span><br><span class="line">author: John Doe</span><br><span class="line">language:</span><br><span class="line">timezone:</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: http://yoursite.com</span><br><span class="line">root: /</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br><span class="line"></span><br><span class="line"># Directory</span><br><span class="line">source_dir: source</span><br><span class="line">public_dir: public</span><br><span class="line">tag_dir: tags</span><br><span class="line">archive_dir: archives</span><br><span class="line">category_dir: categories</span><br><span class="line">code_dir: downloads/code</span><br><span class="line">i18n_dir: :lang</span><br><span class="line">skip_render:</span><br><span class="line"></span><br><span class="line"># Writing</span><br><span class="line">new_post_name: :title.md # File name of new posts</span><br><span class="line">default_layout: post</span><br><span class="line">titlecase: false # Transform title into titlecase</span><br><span class="line">external_link: true # Open external links in new tab</span><br><span class="line">filename_case: 0</span><br><span class="line">render_drafts: false</span><br><span class="line">post_asset_folder: false</span><br><span class="line">relative_link: false</span><br><span class="line">future: true</span><br><span class="line">highlight:</span><br><span class="line">  enable: true</span><br><span class="line">  line_number: true</span><br><span class="line">  auto_detect: false</span><br><span class="line">  tab_replace:</span><br><span class="line"></span><br><span class="line"># Category &amp; Tag</span><br><span class="line">default_category: uncategorized</span><br><span class="line">category_map:</span><br><span class="line">tag_map:</span><br><span class="line"></span><br><span class="line"># Date / Time format</span><br><span class="line">## Hexo uses Moment.js to parse and display date</span><br><span class="line">## You can customize the date format as defined in</span><br><span class="line">## http://momentjs.com/docs/#/displaying/format/</span><br><span class="line">date_format: YYYY-MM-DD</span><br><span class="line">time_format: HH:mm:ss</span><br><span class="line"></span><br><span class="line"># Pagination</span><br><span class="line">## Set per_page to 0 to disable pagination</span><br><span class="line">per_page: 10</span><br><span class="line">pagination_dir: page</span><br><span class="line"></span><br><span class="line"># Extensions</span><br><span class="line">## Plugins: https://hexo.io/plugins/</span><br><span class="line">## Themes: https://hexo.io/themes/</span><br><span class="line">theme: landscape</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type:</span><br></pre></td></tr></table></figure></p>
+<h3 id="静态网站托管服务"><a href="#静态网站托管服务" class="headerlink" title="静态网站托管服务"></a>静态网站托管服务</h3><p>若想要实现任何人都可以访问到你的博客，首先需要将生成的静态网页发布到网上，如果自己有服务器公网Ip就可以用自己的，不过那是土豪才做的事，一般采用的方式是将数据推送到免费提供静态网站托管服务的网站上，比如大家所熟知的<a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>，<a href="https://coding.net/" target="_blank" rel="noopener">Coding</a>等网站。Coding 是国内的一家公司，相比GitHub，访问速度稍微快一些，这里以它为例来说明如何开启静态网站托管服务。</p>
+<ol>
+<li>打开<a href="https://coding.net/" target="_blank" rel="noopener">Coding</a>，注册一个账号 </li>
+<li><p>新建一个项目(仓库)来保存我们的静态网站（博客）</p>
+<p> 如下图，就是我所创建的用来保存静态网站的仓库<br> <img src="我的hexo博客搭建之路/2.png" alt="coding"></p>
+</li>
+<li>初始化仓库<br> 按照下图所示的方式来初始化仓库<br> <img src="我的hexo博客搭建之路/3.png" alt="coding"><br> 完成之后如下图：<br> <img src="我的hexo博客搭建之路/4.png" alt="coding"></li>
+<li>Pages服务<br> 点击上图箭头所示Pages服务<br> <img src="我的hexo博客搭建之路/5.png" alt="coding"><br> 选择分支后，点击保存开启Pages服务<br> <img src="我的hexo博客搭建之路/6.png" alt="coding"><br> 开启Pages 服务之后，记住上面箭头所指的网址,这个网址就是我们用来访问我们的博客所用的地址,还要记住左边的仓库地址，记住要选择ssh协议，下面会用到</li>
+<li>给仓库添加ssh秘钥<br> 如果不添加ssh秘钥，通过git来提交文件到仓库中时需要验证密码，当添加秘钥后就可以直接提交了，首先打开git bash 然后输入下面的命令直接回车就好了<pre><code>ssh-keygen 
+</code></pre> 生成的秘钥文件如果是windows的话在C:/Users/UsersName/.ssh/ 文件夹中，linux 在用户主目录下面的.ssh 中，复制.ssh 文件夹中文件id_rsa.pub中的内容粘贴到下图的位置：<br> <img src="我的hexo博客搭建之路/7.png" alt="coding"><br> 保存之前一定要先选中授予推送权限， 然后输入密码就可以了</li>
+</ol>
+<h3 id="config-yml中的相关配置"><a href="#config-yml中的相关配置" class="headerlink" title="_config.yml中的相关配置"></a>_config.yml中的相关配置</h3><p>配置文件采用的是一种叫做yaml的脚本语言，它是一种类似xml的标记语言，但相比xml具有更多得优点。</p>
+<h4 id="发布相关配置"><a href="#发布相关配置" class="headerlink" title="发布相关配置"></a>发布相关配置</h4><p>当完成上面的步骤之后，想要发布到网络上只要配置_config.yml 中的两个选项就可以了</p>
+<ol>
+<li><p>设置url，root：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">url:</span> <span class="string">http:</span><span class="comment">//yoursite.com 将后面的网址替换为刚刚记录的网址</span></span><br><span class="line"><span class="string">url:</span> <span class="string">http:</span><span class="comment">//cqjn.coding.me/hexozyk #如果放在了子目录需要设置root为子目录</span></span><br><span class="line"><span class="string">root:</span> <span class="regexp">/hexozyk/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置deploy</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">deploy</span>:</span><br><span class="line">	<span class="attribute">type</span>: git</span><br><span class="line">	<span class="attribute">repo</span>: 使用ssh协议访问的git仓库地址</span><br><span class="line">	<span class="attribute">branch</span>: master</span><br><span class="line"><span class="attribute">deploy</span>:</span><br><span class="line"> 	    <span class="attribute">type</span>: git</span><br><span class="line"> 		<span class="attribute">repo</span>: git<span class="variable">@git</span>.coding.<span class="attribute">net</span>:cqjn/hexozyk.git</span><br><span class="line"> 		<span class="attribute">branch</span>: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置完上面的两个配置项就可以了，但是当执行hexo g -d 命令时会出错，需要执行下面的命令安装一个插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>现在执行hexo g -d 命令去生成博客页面并发布到仓库中，然后稍等一会去浏览器中访问你所记下的博客网址看下效果吧。^_^ ^_^</p>
+<h4 id="站点信息设置"><a href="#站点信息设置" class="headerlink" title="站点信息设置"></a>站点信息设置</h4><table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>网站标题</td>
+</tr>
+<tr>
+<td>subtitle</td>
+<td>网站副标题</td>
+</tr>
+<tr>
+<td>description</td>
+<td>网站描述</td>
+</tr>
+<tr>
+<td>author</td>
+<td>作者名字</td>
+</tr>
+<tr>
+<td>language</td>
+<td>网站使用语言</td>
+</tr>
+<tr>
+<td>timezone</td>
+<td>网站时区，hexo 默认使用本机电脑时区</td>
+</tr>
+<tr>
+<td>url</td>
+<td>网址</td>
+</tr>
+<tr>
+<td>root</td>
+<td>网站的根目录</td>
+</tr>
+<tr>
+<td>permalink</td>
+<td>文章的永久链接格式 默认值:year/:month/:day/:title/</td>
+</tr>
+<tr>
+<td>permalink_default</td>
+<td>永久链接中各部分默认值</td>
+</tr>
+</tbody>
+</table>
+<p>descrition 主要用于SEO,告诉搜索引擎一个关于站点的描述</p>
+<h4 id="目录设置"><a href="#目录设置" class="headerlink" title="目录设置"></a>目录设置</h4><p>一般不需要更改这里的配置</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>source_dir</td>
+<td>资源文件夹，这个文件夹用来存放内容</td>
+<td>source</td>
+</tr>
+<tr>
+<td>public_dir</td>
+<td>公共文件夹，这个文件夹用于存放生成的站点文件</td>
+<td>public</td>
+</tr>
+<tr>
+<td>tag_dir</td>
+<td>标签文件夹</td>
+<td>tags</td>
+</tr>
+<tr>
+<td>archive_dir</td>
+<td>归档文件夹</td>
+<td>archives</td>
+</tr>
+<tr>
+<td>category_dir</td>
+<td>分类文件夹</td>
+<td>categories</td>
+</tr>
+<tr>
+<td>code_dir</td>
+<td>Include code 文件夹</td>
+<td>downloads/code</td>
+</tr>
+<tr>
+<td>i18n_dir</td>
+<td>国际化（i18n）文件夹</td>
+<td>:lang</td>
+</tr>
+<tr>
+<td>skip_render</td>
+<td>跳过指定文件的渲染，您可使用 glob 表达式来匹配路径。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="文章相关"><a href="#文章相关" class="headerlink" title="文章相关"></a>文章相关</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>new_post_name</td>
+<td>新文章的文件名称</td>
+<td>:title.md</td>
+</tr>
+<tr>
+<td>default_layout</td>
+<td>预设布局</td>
+<td>post</td>
+</tr>
+<tr>
+<td>auto_spacing</td>
+<td>在中文和英文之间加入空格</td>
+<td>false</td>
+</tr>
+<tr>
+<td>titlecase</td>
+<td>把标题转换为 title case</td>
+<td>false</td>
+</tr>
+<tr>
+<td>external_link</td>
+<td>在新标签中打开链接</td>
+<td>true</td>
+</tr>
+<tr>
+<td>filename_case</td>
+<td>把文件名称转换为 (1) 小写或 (2) 大写</td>
+<td>0</td>
+</tr>
+<tr>
+<td>render_drafts</td>
+<td>显示草稿</td>
+<td>false</td>
+</tr>
+<tr>
+<td>post_asset_folder</td>
+<td>启动 Asset 文件夹</td>
+<td>false</td>
+</tr>
+<tr>
+<td>relative_link</td>
+<td>把链接改为与根目录的相对位址</td>
+<td>false</td>
+</tr>
+<tr>
+<td>future</td>
+<td>显示未来的文章</td>
+<td>true</td>
+</tr>
+<tr>
+<td>highlight</td>
+<td>代码块的设置</td>
+</tr>
+</tbody>
+</table>
+<h4 id="分类-amp-标签-amp-日期-amp-时间-amp-分页-amp-扩展"><a href="#分类-amp-标签-amp-日期-amp-时间-amp-分页-amp-扩展" class="headerlink" title="分类&amp;标签&amp;日期&amp;时间&amp;分页&amp;扩展"></a>分类&amp;标签&amp;日期&amp;时间&amp;分页&amp;扩展</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">default_category</td>
+<td style="text-align:center">默认分类</td>
+<td style="text-align:center">uncategorized</td>
+</tr>
+<tr>
+<td style="text-align:center">category_map</td>
+<td style="text-align:center">分类别名</td>
+</tr>
+<tr>
+<td style="text-align:center">tag_map</td>
+<td style="text-align:center">标签别名</td>
+</tr>
+<tr>
+<td style="text-align:center">date_format</td>
+<td style="text-align:center">日期格式</td>
+<td style="text-align:center">YYYY-MM-DD</td>
+</tr>
+<tr>
+<td style="text-align:center">time_format</td>
+<td style="text-align:center">时间格式</td>
+<td style="text-align:center">H:mm:ss</td>
+</tr>
+<tr>
+<td style="text-align:center">per_page</td>
+<td style="text-align:center">每页显示的文章量 (0 = 关闭分页功能)</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:center">pagination_dir</td>
+<td style="text-align:center">分页目录</td>
+<td style="text-align:center">page</td>
+</tr>
+<tr>
+<td style="text-align:center">theme</td>
+<td style="text-align:center">当前主题名称。值为false时禁用主题</td>
+</tr>
+<tr>
+<td style="text-align:center">deploy</td>
+<td style="text-align:center">部署部分的设置</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hexo-命令"><a href="#hexo-命令" class="headerlink" title="hexo 命令"></a>hexo 命令</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">命令</th>
+<th style="text-align:center">简写</th>
+<th style="text-align:center">使用频率</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">init</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站</td>
+</tr>
+<tr>
+<td style="text-align:center">new</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">新建一篇文章，不常用，因为不太好用，我用shell写了一个类似的new</td>
+</tr>
+<tr>
+<td style="text-align:center">generate</td>
+<td style="text-align:center">g</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">生成静态文件-d, –deploy    文件生成后立即部署网站 -w, –watch    监视文件变动</td>
+</tr>
+<tr>
+<td style="text-align:center">publish</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">发表草稿</td>
+</tr>
+<tr>
+<td style="text-align:center">server</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">启动服务器。默认情况下，访问网址为： <a href="http://localhost:4000/" target="_blank" rel="noopener">http://localhost:4000/</a></td>
+</tr>
+<tr>
+<td style="text-align:center">deploy</td>
+<td style="text-align:center">d</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">部署网站-g, –generate    部署之前预先生成静态文件</td>
+</tr>
+<tr>
+<td style="text-align:center">render</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">渲染文件-o, –output置输出路径</td>
+</tr>
+<tr>
+<td style="text-align:center">migrate</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">从其他博客系统 迁移内容</td>
+</tr>
+<tr>
+<td style="text-align:center">clean</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">高</td>
+<td style="text-align:center">清除缓存文件 (db.json) 和已生成的静态文件 (public)，有啥异常可以试试</td>
+</tr>
+<tr>
+<td style="text-align:center">list</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">列出网站资料</td>
+</tr>
+<tr>
+<td style="text-align:center">version</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">低</td>
+<td style="text-align:center">显示hexo 版本</td>
+</tr>
+</tbody>
+</table>
+<p>其实搭建好后最常用的命令只有hexo g -d 这一条用来生成和发布页面的命令。</p>
+<h2 id="最后的话"><a href="#最后的话" class="headerlink" title="最后的话"></a>最后的话</h2><p>搭建博客很容易，写一篇两篇博客也容易，难得是坚持下去，按照上面的方式就可以搭建一个属于自己的博客了，后续会继续更新，比如介绍一些不错的主题如何配置，如何添加其它功能，如果有可能的话，可以写下如何根据需要自己对主题进行客制化等等。</p>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2017/02/09/领域/hexo/我的hexo博客搭建之路/" target="_blank" title="我的hexo博客搭建之路">砦龑堃</a></b>及出处<b><a href="/2017/02/09/领域/hexo/我的hexo博客搭建之路/" target="_blank" title="我的hexo博客搭建之路">http://ykzhai.top/2017/02/09/领域/hexo/我的hexo博客搭建之路/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《我的hexo博客搭建之路》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/领域/">领域</a>, <a href="/categories/领域/hexo/">hexo</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/原创/">原创</a>, <a href="/tags/hexo/">hexo</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2017/02/09/领域/hexo/我的hexo博客搭建之路/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "我的hexo博客搭建之路"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>vim 中文乱码解决方案 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="vim 中文乱码解决方案"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2016-08-19T09:14:10.000Z"><a href="/2016/08/19/工具/vim-中文乱码解决方案/">2016-08-19</a></time>
+        
+  
+    <h1 class="title">vim 中文乱码解决方案</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#下载"><span class="toc-number">1.</span> <span class="toc-text">下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最后是vimrc的脚本配置了"><span class="toc-number">3.</span> <span class="toc-text">最后是vimrc的脚本配置了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#顺便记录一下Vim编码的详细介绍"><span class="toc-number">4.</span> <span class="toc-text">顺便记录一下Vim编码的详细介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#再来记录一下-Vim-的多字符编码方式支持是如何工作的。"><span class="toc-number">5.</span> <span class="toc-text">再来记录一下 Vim 的多字符编码方式支持是如何工作的。</span></a></li></ol>
+    </div>
+
+        <p>出自： <a href="http://www.cnblogs.com/joeyupdo/archive/2013/03/03/2941737.html" target="_blank" rel="noopener">http://www.cnblogs.com/joeyupdo/archive/2013/03/03/2941737.html</a></p>
+<p> 在vim中编辑一个中文文本时，有时候看起来有乱码，以前都是修修补补的弄没有乱码了就不管了，这个问题一直都很困扰我。突然想到这个问题，于是想把它给解决掉，在网上查了许久，有很多这方面的资料，但是说得不是很到位，经过了一天的折腾，将vim卸载了很多次，也安装了很多次，并做了一些小测试，今天终于搞定了。</p>
+<a id="more"></a>
+<h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><p>   可到<a href="http://www.vim.org/下载最新的7.3版本的vim源码。" target="_blank" rel="noopener">http://www.vim.org/下载最新的7.3版本的vim源码。</a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>   在编译之前，先要./configure –help查看一下配置选项，<br>   其中这个配置需要加进来：–enable-multibyte      Include multibyte editing support</p>
+<p>   其作用是支持多字节编码，这一步应该是很重要。不然后面的配置貌似没什么用，不知道我说得对不对^_^。</p>
+<p>   在配置好了以后，自然是常规的:make 、make install了 </p>
+<h4 id="最后是vimrc的脚本配置了"><a href="#最后是vimrc的脚本配置了" class="headerlink" title="最后是vimrc的脚本配置了"></a>最后是vimrc的脚本配置了</h4><p>   编辑~/.vimrc文件，加上如下几行：</p>
+<p>   set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936<br>   set termencoding=utf-8<br>   set encoding=utf-8</p>
+<p>   即可搞定。</p>
+<h4 id="顺便记录一下Vim编码的详细介绍"><a href="#顺便记录一下Vim编码的详细介绍" class="headerlink" title="顺便记录一下Vim编码的详细介绍"></a>顺便记录一下Vim编码的详细介绍</h4><p> Vim和所有的流行文本编辑器一样，Vim 可以很好的编辑各种字符编码的文件，这当然包括 UCS-2、UTF-8 等流行的 Unicode 编码方式。<br> Vim 有四个跟字符编码方式有关的选项，encoding、fileencoding、fileencodings、termencoding (这些选项可能的取值请参考 Vim 在线帮助  :help encoding-names)，它们的意义如下:</p>
+<ul>
+<li>encoding: Vim 内部使用的字符编码方式，包括 Vim 的 buffer (缓冲区)、菜单文本、消息文本等。用户手册上建议只在 .vimrc 中改变它的值，事实上似乎也只有在 .vimrc 中改变它的值才有意义。</li>
+<li>fileencoding: Vim 中当前编辑的文件的字符编码方式，Vim 保存文件时也会将文件保存为这种字符编码方式 (不管是否新文件都如此)，网上是这样介绍的，但是我这样做在.vimrc中定义为utf-8似乎没有作用，只能在打开vim文件时手动设置才会起效，不知道什么原因。</li>
+<li>fileencodings: Vim 启动时会按照它所列出的字符编码方式逐一探测即将打开的文件的字符编码方式，并且将 fileencoding 设置为最终探测到的字符编码方式。因此最好将 Unicode 编码方式放到这个列表的最前面，将拉丁语系编码方式 latin1 放到最后面。</li>
+<li>termencoding: Vim 所工作的终端 (或者 Windows 的 Console 窗口) 的字符编码方式。这个选项在 Windows 下对我们常用的 GUI 模式的 gVim 无效，而对 Console 模式的 Vim 而言就是 Windows 控制台的代码页，并且通常我们不需要改变它。</li>
+</ul>
+<h4 id="再来记录一下-Vim-的多字符编码方式支持是如何工作的。"><a href="#再来记录一下-Vim-的多字符编码方式支持是如何工作的。" class="headerlink" title="再来记录一下 Vim 的多字符编码方式支持是如何工作的。"></a>再来记录一下 Vim 的多字符编码方式支持是如何工作的。</h4><p> (1)Vim 启动，根据 .vimrc 中设置的 encoding 的值来设置 buffer、菜单文本、消息文的字符编码方式。<br> (2)读取需要编辑的文件，根据 fileencodings 中列出的字符编码方式逐一探测该文件编码方式。并设置 fileencoding 为探测到看起来是正确的 字符编码方式,如果没有找到合适的编码，就用latin-1(ASCII)编码打开。<br> (3) 对比 fileencoding 和 encoding 的值，若不同则调用 iconv 将文件内容转换为 encoding 所描述的字符编码方式，并且把转换后的内容放到为此文件开辟的 buffer 里，此时我们就可以开始编辑这个文件了。<br> (4)编辑完成后保存文件时，再次对比 fileencoding 和 encoding 的值。若不同，再次调用 iconv 将即将保存的 buffer 中的文本转换为 fileencoding 所描述的字符编码方式，并保存到指定的文件中。</p>
+<p> 由于 Unicode 能够包含几乎所有的语言的字符，而且 Unicode 的 UTF-8 编码方式又是非常具有性价比的编码方式 (空间消耗比 UCS-2 小)，因此建议 encoding 的值设置为 utf-8。这么做的另一个理由是 encoding 设置为 utf-8 时，Vim 自动探测文件的编码方式会更准确 (或许这个理由才是主要的 ;) 。我们在中文 Windows 里编辑的文件，为了兼顾与其他软件的兼容性，文件编码还是设置为 GB2312/GBK 比较合适，因此 fileencoding 建议设置为 chinese (chinese 是个别名，在 Unix 里表示 gb2312，在 Windows 里表示 cp936，也就是 GBK 的代码页)。 </p>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2016/08/19/工具/vim-中文乱码解决方案/" target="_blank" title="vim 中文乱码解决方案">砦龑堃</a></b>及出处<b><a href="/2016/08/19/工具/vim-中文乱码解决方案/" target="_blank" title="vim 中文乱码解决方案">http://ykzhai.top/2016/08/19/工具/vim-中文乱码解决方案/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《vim 中文乱码解决方案》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/工具/">工具</a>, <a href="/categories/工具/VIM/">VIM</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/FAQ/">FAQ</a>, <a href="/tags/转载/">转载</a>, <a href="/tags/vim/">vim</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2016/08/19/工具/vim-中文乱码解决方案/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "vim 中文乱码解决方案"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ArchLinux 安装流程 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="ArchLinux 安装流程"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2016-08-19T07:23:46.000Z"><a href="/2016/08/19/Linux/archlinux  安装/">2016-08-19</a></time>
+        
+  
+    <h1 class="title">ArchLinux 安装流程</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#A-安装前的准备"><span class="toc-number">1.</span> <span class="toc-text">A. 安装前的准备</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#B-开始安装"><span class="toc-number">2.</span> <span class="toc-text">B.开始安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C-配置新系统"><span class="toc-number">3.</span> <span class="toc-text">C.配置新系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#D-安装配置常用软件环境"><span class="toc-number">4.</span> <span class="toc-text">D.安装配置常用软件环境</span></a></li></ol>
+    </div>
+
+        <ul>
+<li><a href="https://wiki.archlinux.org/index.php/Installation_guide" target="_blank" rel="noopener">官方Wiki页面</a></li>
+<li><a href="http://bbs.archlinuxcn.org/viewtopic.php?id=1037" target="_blank" rel="noopener">Arch中文论坛–安装指南</a><a id="more"></a>
+</li>
+</ul>
+<h4 id="A-安装前的准备"><a href="#A-安装前的准备" class="headerlink" title="A. 安装前的准备"></a>A. 安装前的准备</h4><ul>
+<li><p>1.键盘布局  </p>
+<p>  默认键盘布局是 US 键盘, 可以通过 loadkeys “keymap_name” 的命令切换键盘布局，键盘映射表请查看 /usr/share/kbd/keymaps<br>  一般不需要改动</p>
+<pre><code>localectl list-keymaps  //查看可用的键盘列表
+loadkeys &lt;key_map&gt;
+</code></pre></li>
+<li>2.连接网络<ul>
+<li>有线网络都已经启用了dhcpcd服务，一般不需要设置即可联网</li>
+<li>无线网络运行 wifi-menu 设置无线网络<pre><code>wifi-menu    
+</code></pre></li>
+<li>设置完成以后运行 ping <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> 查看网络是否畅通</li>
+</ul>
+</li>
+<li>3.硬盘分区<pre><code>fdisk  /dev/sda
+</code></pre></li>
+<li>4.格式化分区<pre><code>mkfs.ext4 /dev/sda*  
+mkswap //swap 分区
+</code></pre></li>
+<li>5.挂载分区<pre><code>mount /dev/sda* /mnt  
+mount /dev/sda* /mnt/home  //if have
+mount /dev/sda* /mnt/boot 
+swapon /dev/&lt;swap 分区&gt;
+</code></pre></li>
+</ul>
+<h4 id="B-开始安装"><a href="#B-开始安装" class="headerlink" title="B.开始安装"></a>B.开始安装</h4><ul>
+<li>6.选择镜像<pre><code>vim /etc/pacman.d/mirrorlist
+//添加国内比较快的镜像源，一般使用网易的镜像源
+Server = http://mirrors.163.com/archlinux/$repo/os/$arch
+//USTC的源
+Server = http://mirrors4.ustc.edu.cn/archlinux/$repo/os/$arch
+</code></pre></li>
+<li>7.同步数据库<pre><code>pacman -Syy 
+同步远程软件包列表到本地
+</code></pre></li>
+<li>8.安装基本系统<pre><code>pacstrap /mnt base base-devel  //  /mnt 目录就是安装好系统的根目录 
+</code></pre></li>
+<li>9.配置fstab<pre><code>genfstab -U -p /mnt &gt;&gt; /mnt/etc/fstab  //生成分区信息并写入到新系统
+</code></pre></li>
+</ul>
+<h4 id="C-配置新系统"><a href="#C-配置新系统" class="headerlink" title="C.配置新系统"></a>C.配置新系统</h4><ul>
+<li>10.切换到新系统<pre><code>arch-chroot /mnt /bin/bash 
+</code></pre></li>
+<li>11.设置主机名<pre><code>echo computer_name /etc/hostname
+vi /etc/hosts    //将主机名添加到最后
+</code></pre></li>
+<li>12.设置语言<pre><code>vi /etc/locale.gen  //反注释掉所需要的locale
+locale-gen       //生成locale
+echo LANG=&lt;locale&gt; &gt; /etc/locale.conf //设置默认locale
+</code></pre></li>
+<li>13.设置时区<pre><code>ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
+</code></pre></li>
+<li>14.设置网络<ul>
+<li>有线网络<pre><code>systemctl start dhcpcd 
+systemctl enable dhcpcd  //开机启动dhcp服务
+</code></pre></li>
+<li>无线网络<pre><code>pacman -S iw wpa_supplicant dialog wifi-menu
+wifi-menu
+</code></pre></li>
+</ul>
+</li>
+<li>15.设置密码<pre><code>passwd
+</code></pre></li>
+<li>16.安装引导程序<pre><code>pacman -S grub os-prober
+grub-install --recheck /dev/sd*
+grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre></li>
+<li>17.卸载分区重启<pre><code>exit
+umount -R /mnt 
+reboot 
+</code></pre></li>
+</ul>
+<h4 id="D-安装配置常用软件环境"><a href="#D-安装配置常用软件环境" class="headerlink" title="D.安装配置常用软件环境"></a>D.安装配置常用软件环境</h4><ul>
+<li>18.添加新用户<pre><code>useradd -m -g users -s /bin/bash &lt;用户名&gt;
+//创建一个用户， 指定shell 主用户组为users ，创建用户主目录
+passwd UserName  //设置密码
+</code></pre></li>
+<li>19.安装显卡驱动<br>首先要知道自己的显卡型号，然后在安装驱动包<pre><code>lspci | grep VGA 
+</code></pre>官方驱动包：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>型号</th>
+<th>驱动包</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通用</td>
+<td>xf86-video-vesa</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>Intel</td>
+<td>xf86-vidio-intel</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>Nvdia</td>
+<td>xf86-video-nouveau</td>
+<td>NA</td>
+</tr>
+<tr>
+<td>AMD/ATI</td>
+<td>xf86-vedio-ati</td>
+<td>NA</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>20.安装X窗口系统<pre><code>pacman -S xorg-server xorg-server-utils 
+pacman -S xf86-input-synaptics //触摸板支持
+pacman -S ttf-dejavu wqy-microhei //字体
+</code></pre></li>
+<li>21.安装桌面环境<pre><code>pacman -S 桌面环境
+* cinnanon
+* Enlightement
+* gnome
+* kde
+* lxde
+* xfce
+</code></pre></li>
+<li>22.安装登录管理器<pre><code>pacman -S 登录管理器
+* lxdm
+* gdm
+* slim
+* sddm
+。。。。。。
+systemctl enable 登录管理器 //设置自启动
+</code></pre></li>
+</ul>
+<p>到这里差不多就可以重启进入图形界面了。^^_^^</p>
+<hr>
+<p><a href="http://www.jianshu.com/users/598d0c43a33f/latest_articles" target="_blank" rel="noopener">此去经年</a><br>Email:<a href="mailto:zhaiyk@sina.cn" target="_blank" rel="noopener">zhaiyk@sina.cn</a><br>July 25, 2016</p>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2016/08/19/Linux/archlinux  安装/" target="_blank" title="ArchLinux 安装流程">砦龑堃</a></b>及出处<b><a href="/2016/08/19/Linux/archlinux  安装/" target="_blank" title="ArchLinux 安装流程">http://ykzhai.top/2016/08/19/Linux/archlinux  安装/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《ArchLinux 安装流程》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/Linux/">Linux</a>, <a href="/categories/Linux/系统/">系统</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/Arch/">Arch</a>, <a href="/tags/原创/">原创</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2016/08/19/Linux/archlinux  安装/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "ArchLinux 安装流程"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

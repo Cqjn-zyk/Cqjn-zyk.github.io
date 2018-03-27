@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>项目管理工具make之Makefile | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="项目管理工具make之Makefile"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2016-08-22T01:16:24.000Z"><a href="/2016/08/22/工具/项目管理工具make之Makefile/">2016-08-22</a></time>
+        
+  
+    <h1 class="title">项目管理工具make之Makefile</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#基本规则"><span class="toc-number">1.</span> <span class="toc-text">基本规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#伪目标"><span class="toc-number">2.</span> <span class="toc-text">伪目标</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#标准的假想工作目标"><span class="toc-number">2.1.</span> <span class="toc-text">标准的假想工作目标</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#变量"><span class="toc-number">3.</span> <span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#自动变量"><span class="toc-number">3.1.</span> <span class="toc-text">自动变量</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#条件指令"><span class="toc-number">4.</span> <span class="toc-text">条件指令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文件搜寻路径"><span class="toc-number">5.</span> <span class="toc-text">文件搜寻路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#include-关键字-包含其他MakeFile文件"><span class="toc-number">6.</span> <span class="toc-text">include 关键字 包含其他MakeFile文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#规则"><span class="toc-number">7.</span> <span class="toc-text">规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用函数"><span class="toc-number">8.</span> <span class="toc-text">使用函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MAKE-选项"><span class="toc-number">9.</span> <span class="toc-text">MAKE 选项</span></a></li></ol>
+    </div>
+
+        <h4 id="基本规则"><a href="#基本规则" class="headerlink" title="基本规则"></a>基本规则</h4><p>Makefile 的基本规则比较简单，就是下面的目标，依赖和命令，命令是指从依赖生成目标所需要的命令<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">目标：依赖<span class="number">1</span> 依赖<span class="number">2</span> 依赖<span class="number">3</span> ……</span><br><span class="line">	命令</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>一个简单的例子：<br>现在有一个helloworld.c 和一个helloworld.h 两个源文件，需要编译成为一个可执行文件,一般只要在命令行敲下编译命令就可以了<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc helloworld.c helloworld.h -o helloworld</span><br></pre></td></tr></table></figure></p>
+<p>根据上面的基本规则，我们可以写如下的Makefile来完成上面的工作<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helloworld: hellworld.c helloworld.h</span><br><span class="line">	gcc helloworld.c helloworld.h -o helloworld</span><br></pre></td></tr></table></figure></p>
+<p>这样我们每次编译就只需要敲一下make 命令就可以了<br>make工具会去自动比较文件的时间戳，当依赖文件中的一个文件比目标文件更新时，就会执行命令，否则的话，便不会执行命令</p>
+<h4 id="伪目标"><a href="#伪目标" class="headerlink" title="伪目标"></a>伪目标</h4><p>伪目标与真实的目标相比，伪目标不会产生真正的目标文件，而是执行一系列我们想要执行的命令<br>比如：我们常用make clean 来清除编译过程中所生成的文件<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.PHONY</span> <span class="selector-pseudo">:clean</span></span><br><span class="line"><span class="selector-tag">clean</span>: </span><br><span class="line">	<span class="selector-tag">rm</span> *<span class="selector-class">.o</span> *<span class="selector-class">.bin</span></span><br></pre></td></tr></table></figure></p>
+<p>上面的.PHONY 是一个伪命令的关键字，表示后面的目标 clean是一个伪目标，每次make clean 都要执行clean 目标后面的命令<br>这个命令的作用是清除所有的.o和.bin 文件<br>我们也可以这样使用伪目标，当我们需要生成多个可执行程序的时候，可以定义一个伪目标，为目标的依赖就是我们需要生成的多个可执行程序，每次执行make 伪目标的时候，都会去寻找依赖，当没有依赖的时候，便会去找有没有以依赖作为目标的存在，如果有的话便会去执行<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.PHONY : all</span><br><span class="line">all: Prog1 Prog2 Prog3 ...</span><br><span class="line">Prog1: Prog1.c Prog1.h</span><br><span class="line">	gcc Prog1.c Prog1.h -o Prog1</span><br><span class="line">Prog2: Prog2.c Prog2.h</span><br><span class="line">	gcc Prog2.c Prog2.h -o Prog2</span><br><span class="line">Prog3: Prog3.c Prog3.h </span><br><span class="line">	gcc Prog3.c Prog3.h -o Prog3</span><br></pre></td></tr></table></figure></p>
+<h5 id="标准的假想工作目标"><a href="#标准的假想工作目标" class="headerlink" title="标准的假想工作目标"></a>标准的假想工作目标</h5><ul>
+<li>all ： 执行编译程序的所有工作</li>
+<li>install： 从已经编译好的二进制文件进行程序的安装</li>
+<li>clean ：删除编译生成的所有文件</li>
+<li>distclean： 删除编译过程中所产生的任何文件，包含configure文件</li>
+<li>TAGS ：建立可供编辑器所用的标记</li>
+<li>info ：从XXXX 中来创建GNUinfo文件</li>
+<li>check ：执行与应用程序相关的任何测试</li>
+</ul>
+<h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p>makefile 中可以定义变量，其特性就相当于C语言中的宏定义一样，可以使用：=或者=来定义变量，但是这两种定义变量的方法所达到的效果是不同的，前者称为简单扩展的变量，后者称为可递归的变量<br>简单扩展的变量，当读入变量的时候就会立即被扩展，例如：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Flags:= $(CC) -M</span><br><span class="line">此时如果CC变量被定义为了GCC </span><br><span class="line">那么FLags为</span><br><span class="line">GCC -M</span><br><span class="line">如果未定义的话，</span><br><span class="line">那么Flags为</span><br><span class="line">空 -M</span><br></pre></td></tr></table></figure></p>
+<p>如果为可递归的变量的话，当变量被引用的时候才会被扩展，如：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Flags= $(<span class="keyword">CC</span>)  -<span class="built_in">M</span></span><br><span class="line">如果此时<span class="keyword">CC</span>未定义的话，</span><br><span class="line">此时引用Flags 即为空 -<span class="built_in">M</span></span><br><span class="line">如果后面定义了<span class="keyword">CC</span></span><br><span class="line"><span class="keyword">CC</span>：= GCC</span><br><span class="line">那么在之后再进行引用Flags的话就会变为新值了</span><br><span class="line">GCC -<span class="built_in">M</span></span><br></pre></td></tr></table></figure></p>
+<p>此外还有？=与+=来进行变量赋值<br>？= 只在要赋值的变量没有值得情况才会进行赋值动作<br>+= 类似增量赋值，在原先的变量值后面添加新的值</p>
+<p>引用变量使用$美元符号+括号来引用，<br>变量的命名可以使用字符，数字，下划线（可以是数字开头）。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">objs= a.c b.c c.c d.c</span><br><span class="line">all : $(objs)</span><br><span class="line">	gcc  -o all $(objs)或者 $&#123;objs&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="自动变量"><a href="#自动变量" class="headerlink" title="自动变量"></a>自动变量</h5><p>make中预设了几个自动变量，如下：</p>
+<ul>
+<li>$@ ： 当前目标  </li>
+<li>$% ： 档案文件成员</li>
+<li>$&lt; ： 第一个依赖条件</li>
+<li>$^ ： 所有的依赖条件</li>
+<li>$? ： 时间戳比目标文件新的依赖文件</li>
+<li>$+ ： 同$^,但会包含重复的文件名 首字符也为$，但是没有显示</li>
+<li>$* ： 工作目标文件名（不含拓展名）</li>
+</ul>
+<p>这些自动变量同时还有一些变体如下：</p>
+<ul>
+<li>$(@D) 目录 </li>
+<li>$(@F) 文件</li>
+</ul>
+<p>这样上面的makefile可以改写为<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helloworld: helloworld<span class="selector-class">.c</span> helloworld.h</span><br><span class="line">	gcc -o $@ $^</span><br></pre></td></tr></table></figure></p>
+<p>这样相比上面的就更加简洁了一些</p>
+<h4 id="条件指令"><a href="#条件指令" class="headerlink" title="条件指令"></a>条件指令</h4><p>makefile中可以利用条件执行来判断去执行不同的命令<br>假如判断CC变量是否为GCC<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ifeq</span> （<span class="variable">$(CC)</span>,gcc）</span><br><span class="line"><span class="variable">$(CC)</span> -o foo <span class="variable">$(objs)</span> <span class="variable">$(lib_gcc)</span></span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line"><span class="variable">$(CC)</span> -o foo <span class="variable">$(objs)</span> <span class="variable">$(lib_other)</span></span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure></p>
+<p>上面通过CC的值来确定要链接的库是不是GCC的库函数<br>一般的条件判断形式为<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ifXX ()</span><br><span class="line"><span class="keyword">text</span>-<span class="keyword">if</span>-<span class="literal">true</span></span><br><span class="line"><span class="keyword">else</span> <span class="comment"> //也可以不用else 分支</span></span><br><span class="line"><span class="keyword">text</span>-<span class="keyword">if</span>-<span class="literal">false</span></span><br><span class="line">endif</span><br></pre></td></tr></table></figure></p>
+<p>ifxx可以有四种类型：<br>ifeq<br>ifneq<br>ifdef<br>ifndef<br>注意：<br>make是在读取Makefile时就计算条件表达式的值，并根据条件表达式的值来选择语句，不要把自动变量放入条件表达式中，因此自动变量是在运行时才有的。</p>
+<h4 id="文件搜寻路径"><a href="#文件搜寻路径" class="headerlink" title="文件搜寻路径"></a>文件搜寻路径</h4><p>一般情况下，工程中有大量的源文件，我们一般将他们分类放在不同的目录中，所以，当make需要去寻找文件依赖关系的时候，可以在文件名前加上路径，但是最好的方法是将一个路径通知make，让make自动去寻找。<br>makefile中的特殊变量“VPATH”就可以完成这个功能，    当make没有在当前目录中找到所需要的依赖文件和目标文件时，如果定义了这个变量，make就会去VPATH指定的目录中去寻找文件了。<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">VPATH</span>= src:../headers</span><br></pre></td></tr></table></figure></p>
+<p>上面定义指定了两个目录， src 和 ../headers ，make 会按照这个顺序进行搜索，目录之间通过:来进行分隔<br>还有一种方式来指定搜索路径，就是使用小写的vpath关键字，它可以用来指定某种类型的文件，去哪个目录中寻找<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vpath %<span class="string">.h</span> <span class="string">../include</span>  <span class="string">//</span>指定<span class="string">.h</span>文件到include中寻找</span><br><span class="line">vpath %<span class="string">.c</span> <span class="string">../src</span>    <span class="string">//.c</span> src</span><br><span class="line">vpath %<span class="string">.h</span> <span class="string">../a</span>   <span class="string">//</span>指定<span class="string">.h</span>到a目录下寻找，与上面的<span class="string">.h</span>到include中寻找 优先级为 include&gt;a</span><br><span class="line">vpath %<span class="string">.h</span>      清除<span class="string">.h</span>文件指定的目录</span><br><span class="line">vpath          清除所有文件类型指定的目录</span><br></pre></td></tr></table></figure></p>
+<h4 id="include-关键字-包含其他MakeFile文件"><a href="#include-关键字-包含其他MakeFile文件" class="headerlink" title="include 关键字 包含其他MakeFile文件"></a>include 关键字 包含其他MakeFile文件</h4><p>Make中也有include关键字，其作用与C语言中的include类似，包含其他的makefile文件<br>当需要包含其他的makefile文件时，使用include关键字来进行包含<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include <span class="selector-tag">a</span><span class="selector-class">.mk</span>    这里会包含<span class="selector-tag">a</span>.mk这个makefile文件 如果找不到会报错 ，如果想要make不管找不找得到都不报错，可以在前面加上- 如下</span><br><span class="line">-include <span class="selector-tag">a</span><span class="selector-class">.mk</span>   这样就不会报错了，即使找不到这个makefile文件也会继续执行下去</span><br></pre></td></tr></table></figure></p>
+<h4 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h4><p>make中包含许多规则，规则可以简单地理解为从依赖生成目标的方法，分为下面几类：</p>
+<ul>
+<li>具体规则 ： 我们明确定义的生成目标的方式</li>
+<li>模式规则 ： make内置的一些规则</li>
+<li>隐含规则 ： 也是由make工具所内置的</li>
+</ul>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">%<span class="string">.o</span>:%<span class="string">.c</span></span><br><span class="line">	gcc -c $^ -o $@   <span class="string">//</span>会将所有的<span class="string">.c</span> 文件编译生成<span class="string">.o</span> 文件 </span><br><span class="line">	</span><br><span class="line">hell.o<span class="function">:hello.c</span>  <span class="string">//</span>虽然没有写命令，但make工具会根据隐含规则自动生成<span class="string">.o</span> 文件</span><br></pre></td></tr></table></figure>
+<h4 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h4><p>make中已经内置了许多函数供我们使用<br>函数的使用很像变量的使用，也是使用$这个字符，函数名和参数用空格隔开，参数之间使用逗号<br>$(function )</p>
+<h4 id="MAKE-选项"><a href="#MAKE-选项" class="headerlink" title="MAKE 选项"></a>MAKE 选项</h4><p>make的选项有好多，具体的只能遇到了再去查了，这里先记录下：</p>
+<ul>
+<li>–just-print （-n） 用来要求make显示它为特定目标执行的命令，但不实际执行它们，只打印执行的命令，不执行命令 主要用来调试</li>
+<li>-C   path  target  切换到path路径执行make命令生成目标 target</li>
+<li>-f  文件名  指定makefile文件</li>
+<li>-I  目录名   包含其他makefile的目录</li>
+</ul>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2016/08/22/工具/项目管理工具make之Makefile/" target="_blank" title="项目管理工具make之Makefile">砦龑堃</a></b>及出处<b><a href="/2016/08/22/工具/项目管理工具make之Makefile/" target="_blank" title="项目管理工具make之Makefile">http://ykzhai.top/2016/08/22/工具/项目管理工具make之Makefile/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《项目管理工具make之Makef》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/工具/">工具</a>, <a href="/categories/工具/Make/">Make</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/原创/">原创</a>, <a href="/tags/make/">make</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2016/08/22/工具/项目管理工具make之Makefile/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "项目管理工具make之Makefile"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

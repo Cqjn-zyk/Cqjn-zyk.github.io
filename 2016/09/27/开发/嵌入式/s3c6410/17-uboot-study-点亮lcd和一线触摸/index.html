@@ -1,0 +1,481 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>17-uboot-study-点亮lcd和一线触摸 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="17-uboot-study-点亮lcd和一线触摸"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2016-09-27T01:10:23.000Z"><a href="/2016/09/27/开发/嵌入式/s3c6410/17-uboot-study-点亮lcd和一线触摸/">2016-09-27</a></time>
+        
+  
+    <h1 class="title">17-uboot-study-点亮lcd和一线触摸</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#S3C6410的显示控制器"><span class="toc-number">1.</span> <span class="toc-text">S3C6410的显示控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#LCD驱动支持四种接口："><span class="toc-number">1.1.</span> <span class="toc-text">LCD驱动支持四种接口：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#显示控制器由VSFR、VDMA、VPRCS-VTIME-和视频时钟产生器组成"><span class="toc-number">1.2.</span> <span class="toc-text">显示控制器由VSFR、VDMA、VPRCS/VTIME 和视频时钟产生器组成:</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#RGB-接口说明"><span class="toc-number">1.3.</span> <span class="toc-text">RGB 接口说明</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S70-7寸LCD-介绍"><span class="toc-number">2.</span> <span class="toc-text">S70 7寸LCD 介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#显示控制器寄存器描述"><span class="toc-number">3.</span> <span class="toc-text">显示控制器寄存器描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码说明"><span class="toc-number">4.</span> <span class="toc-text">代码说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#完整代码"><span class="toc-number">5.</span> <span class="toc-text">完整代码</span></a></li></ol>
+    </div>
+
+        <h4 id="S3C6410的显示控制器"><a href="#S3C6410的显示控制器" class="headerlink" title="S3C6410的显示控制器"></a>S3C6410的显示控制器</h4><p>显示控制器有一个用于转换图像数据的逻辑，这个逻辑是指从本地总线的后处理器或系统内存内的视频缓冲区到外部LCD驱动器接口的传输图像数据的逻辑。<br><a id="more"></a></p>
+<h5 id="LCD驱动支持四种接口："><a href="#LCD驱动支持四种接口：" class="headerlink" title="LCD驱动支持四种接口："></a>LCD驱动支持四种接口：</h5><ul>
+<li>传统的RGB接口</li>
+<li>I80接口</li>
+<li>NTSC/PAL标准TV编码器接口</li>
+<li>IT-R BT.601 接口<br>这里使用的lcd是RGB接口的，因此后面主要介绍RGB接口。</li>
+</ul>
+<h5 id="显示控制器由VSFR、VDMA、VPRCS-VTIME-和视频时钟产生器组成"><a href="#显示控制器由VSFR、VDMA、VPRCS-VTIME-和视频时钟产生器组成" class="headerlink" title="显示控制器由VSFR、VDMA、VPRCS/VTIME 和视频时钟产生器组成:"></a>显示控制器由VSFR、VDMA、VPRCS/VTIME 和视频时钟产生器组成:</h5><ul>
+<li>VSFR  包括可编程寄存器设置和2个256*25的调色板存储器，用于配置显示控制器</li>
+<li>VDMA 专用于显示DMA，VDMA可以将帧存储器内的视频数据转换到VPRCS。通过使用特殊的DMA-VDMA，可以不使用CPU，直接将视频数据显示在屏幕上</li>
+<li>VPRCS 接受VDMA发出的视频数据，将其转换到适合的数据格式，如8 位像素或16 位像素后，将视频数据发送到显示设备上</li>
+<li>VTIME 包括可编程逻辑，以支持在不同LCD 驱动上发现的接口时序和速率的各种环境。VIIME 模块产生RGB_VSYNC, RGB_HSYNC, RGB_VCLK, RBG_VDEN, SYS_CS,SYS_CS0 等等。</li>
+</ul>
+<h5 id="RGB-接口说明"><a href="#RGB-接口说明" class="headerlink" title="RGB 接口说明"></a>RGB 接口说明</h5><ul>
+<li>TIME时序： 由VTIME产生控制信号，如 RGBZ-VSYNC,RGB_HSYNC,RGB_VDEN和RGB_VCLK信号，这些时序控制信号与VSFR寄存器内的VIDTCON0/1/2寄存器的配置有很大的关系，根据VSFR中的配置，VTIME可以产生lcd所需要的控制信号。<ul>
+<li>VSVNC 垂直同步信号,帧信号</li>
+<li>HSYNC 行同步信号</li>
+<li>VCLK  时钟信号</li>
+<li>VDEN  使能信号</li>
+<li>CS    片选信号</li>
+<li>CS0   片选信号<br>VCLK信号的速率可以由VIDCON0 寄存器内的CLKVAL 域来控制，VCLK（hz）=HCLK/(CLKVAL+1)  CLKVAL &gt;=1</li>
+</ul>
+</li>
+<li>IO接口： RGB 接口管脚描述<br><img src="17-uboot-study-点亮lcd和一线触摸/1.png" alt="RGB interface"></li>
+</ul>
+<h4 id="S70-7寸LCD-介绍"><a href="#S70-7寸LCD-介绍" class="headerlink" title="S70 7寸LCD 介绍"></a>S70 7寸LCD 介绍</h4><p>所用的S70 LCD 屏幕为友善之臂所做的， 用了所谓的一线触摸驱动，先来看下硬件原理图：<br><img src="17-uboot-study-点亮lcd和一线触摸/2.png" alt="RGB interface"><br>说明：上图所示，左边为S70 LCD板连接到开发板上的排线接口，主要引脚为LCD 的RGB接口相关的引脚和电源引脚以及复位引脚，除此之外，还多了两个引脚，TOUT1 和EINT10 引脚，这两个引脚就是友善之臂用来控制LCD 电源和背光还有得到触摸数据的。右图为lcd 所用的驱动芯片 的接口，其中大部分IO口都连接到了排线接口，还有一部分接到了电源引脚，需要注意的是：VLED+ ，VLED- VGH，VGL 引脚分别为LCD的背光灯电源和高压电源，这几个引脚在以下原理图中：<br><img src="17-uboot-study-点亮lcd和一线触摸/3.png" alt="RGB interface"><br>如上图：有两个升压芯片MP1541DJ 和EUP2584， 前者将5V升压到40V左右，为LCD提供高压电源，后者为LCD背光提供电源。控制这两个芯片开关的引脚有两个，一个为BL_EN引脚，此引脚同时控制两个引脚的使能，此外控制LCD背光的还有一个引脚为LEDDM，它的频率可以控制背光LED的亮度。下面来看这两个引脚连接到了哪里：<br><img src="17-uboot-study-点亮lcd和一线触摸/4.png" alt="RGB interface"><br>如上图：BL_EN引脚和LDDM引脚连接到了一个STC单片机上，受它控制，所以重点就是这个单片机了，它完成了控制背光和获得触摸数据的功能，它的一个SPI接口连接到了触摸屏驱动IC上来获取数据，因此，重点就是我们如何来控制这个单片机了,重点就是Tout1 和EINT10这两个引脚，它们被引出接到了S70 与开发板的排线接口，最后被连接到了处理器的两个引脚上。如下图：<br><img src="17-uboot-study-点亮lcd和一线触摸/5.png" alt="RGB interface"><br>上面有三个lcd 接口，因为开发板兼容了几个不同大小的屏，控制单片机的两个引脚被接到了GPE0和PWM1（GPF15）接口。其中Tout 对应GPE0，EINT10对应PWM1（GPF15），为啥用两根引脚呢，推测是当GPE0 使能时，单片机接受GPF15的信号控制，相当于使用GPE0 IO口作为一个开关，而GPF15控制单片机的协议官方并没有给出，所以我们只能从一线触摸代码中了解一些。</p>
+<h4 id="显示控制器寄存器描述"><a href="#显示控制器寄存器描述" class="headerlink" title="显示控制器寄存器描述"></a>显示控制器寄存器描述</h4><p>简单的看下用到的一些寄存器，还有很多功能性的寄存器，这里只是点亮lcd ，用不着，就不多说了，具体的等使用的时候再来查看芯片手册就行了。</p>
+<ul>
+<li>MIFPCON  设置LCD by pass，此处设置为Normal mode<br><img src="17-uboot-study-点亮lcd和一线触摸/6.png" alt="Register"></li>
+<li>VIDCON0 设置接口类型，数据类型等等<br><img src="17-uboot-study-点亮lcd和一线触摸/7.png" alt="Register"><br><img src="17-uboot-study-点亮lcd和一线触摸/8.png" alt="Register"></li>
+<li>VIDCON1 设置各种控制信号的极性<br><img src="17-uboot-study-点亮lcd和一线触摸/9.png" alt="Register"></li>
+<li>VIDTCON0 时序控制寄存器0 根据LCD驱动芯片datasheet中时序参数设置<br><img src="17-uboot-study-点亮lcd和一线触摸/10.png" alt="Register"></li>
+<li>VIDTCON1 同上<br><img src="17-uboot-study-点亮lcd和一线触摸/11.png" alt="Register"></li>
+<li>VIDTCON2 写入水平和垂直尺寸<br><img src="17-uboot-study-点亮lcd和一线触摸/12.png" alt="Register"></li>
+<li>WINCON0 支持5个窗口，我们简单使用窗口0就可以了<br><img src="17-uboot-study-点亮lcd和一线触摸/13.png" alt="Register"><br><img src="17-uboot-study-点亮lcd和一线触摸/14.png" alt="Register"></li>
+<li>VIDOSD0A 窗口位置设置A<br><img src="17-uboot-study-点亮lcd和一线触摸/15.png" alt="Register"></li>
+<li>VIDOSD0B 窗口位置设置B<br><img src="17-uboot-study-点亮lcd和一线触摸/16.png" alt="Register"></li>
+<li>VIDOSD0C 窗口位置设置C<br><img src="17-uboot-study-点亮lcd和一线触摸/17.png" alt="Register"></li>
+<li>Window buffer addr start<br><img src="17-uboot-study-点亮lcd和一线触摸/18.png" alt="Register"></li>
+<li>Window buffer addr end<br><img src="17-uboot-study-点亮lcd和一线触摸/19.png" alt="Register"></li>
+</ul>
+<h4 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br></pre></td><td class="code"><pre><span class="line">*******lcd.c********</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"framebuffer.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lcd.h"</span></span></span><br><span class="line"><span class="comment">//#include "pic.c"</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GPECON  (*((volatile unsigned long *)0x7F008080))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GPEDAT  (*((volatile unsigned long *)0x7F008084))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GPFCON  (*((volatile unsigned long *)0x7F0080A0))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GPFDAT  (*((volatile unsigned long *)0x7F0080A4))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GPICON  (*((volatile unsigned long *)0x7F008100))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> GPJCON  (*((volatile unsigned long *)0x7F008120))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* display controller */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MIFPCON     (*((volatile unsigned long *)0x7410800C))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SPCON         (*((volatile unsigned long *)0x7F0081A0))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDCON0      (*((volatile unsigned long *)0x77100000))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDCON1      (*((volatile unsigned long *)0x77100004))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDTCON0     (*((volatile unsigned long *)0x77100010))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDTCON1     (*((volatile unsigned long *)0x77100014))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDTCON2     (*((volatile unsigned long *)0x77100018))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WINCON0      (*((volatile unsigned long *)0x77100020))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDOSD0A      (*((volatile unsigned long *)0x77100040))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDOSD0B      (*((volatile unsigned long *)0x77100044))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDOSD0C      (*((volatile unsigned long *)0x77100048))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDW00ADD0B0      (*((volatile unsigned long *)0x771000A0))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDW00ADD1B0      (*((volatile unsigned long *)0x771000D0))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> VIDW00ADD2      (*((volatile unsigned long *)0x77100100))</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  VSPW         9</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  VBPD        12</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  LINEVAL    479</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  VFPD        21</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  HSPW         19    </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  HBPD         25</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  HOZVAL      799</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span>  HFPD        209</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LeftTopX     0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LeftTopY     0</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> RightBotX   799 <span class="comment">/*S70：799*/</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> RightBotY   479 <span class="comment">/*S70：479*/</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FRAME_BUFFER   0x59000000</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lcd_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/* 1. 设置相关GPIO引脚用于LCD */</span></span><br><span class="line">	GPICON = <span class="number">0xaaaaaaaa</span>;  <span class="comment">/* gpi0~gpi15用作lcd_vd[0~15] */</span></span><br><span class="line">	GPJCON = <span class="number">0xaaaaaaa</span>;   <span class="comment">/* gpj0~gpi11用作lcd */</span></span><br><span class="line">	GPECON &amp;= ~(<span class="number">0xf</span>);</span><br><span class="line">	GPECON |= (<span class="number">0x1</span>);          <span class="comment">/* GPE0用作LCD的on/off信号 */</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* 2. 初始化6410的display controller </span></span><br><span class="line"><span class="comment">	 * 2.1 hsync,vsync,vclk,vden的极性和时间参数</span></span><br><span class="line"><span class="comment">	 * 2.2 行数、列数(分辨率),象素颜色的格式</span></span><br><span class="line"><span class="comment">	 * 2.3 分配显存(frame buffer),写入display controller</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line"></span><br><span class="line">	MIFPCON &amp;= ~(<span class="number">1</span>&lt;&lt;<span class="number">3</span>);   <span class="comment">/* Normal mode */</span></span><br><span class="line"></span><br><span class="line">	SPCON    &amp;= ~(<span class="number">0x3</span>);</span><br><span class="line">	SPCON    |= <span class="number">0x1</span>;            <span class="comment">/* RGB I/F style */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">	VIDCON0 &amp;= ~((<span class="number">3</span>&lt;&lt;<span class="number">26</span>) | (<span class="number">3</span>&lt;&lt;<span class="number">17</span>) | (<span class="number">0xff</span>&lt;&lt;<span class="number">6</span>));     <span class="comment">/* RGB I/F, RGB Parallel format,  */</span></span><br><span class="line">	VIDCON0 |= ((<span class="number">2</span>&lt;&lt;<span class="number">6</span>) | (<span class="number">1</span>&lt;&lt;<span class="number">4</span>) | (<span class="number">0x3</span>&lt;&lt;<span class="number">2</span>));      <span class="comment">/* vclk== 27MHz Ext Clock input / (CLKVAL+1) = 27/3 = 9MHz */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">	VIDCON0 &amp;= ~((<span class="number">3</span>&lt;&lt;<span class="number">26</span>) | (<span class="number">3</span>&lt;&lt;<span class="number">17</span>) | (<span class="number">0xff</span>&lt;&lt;<span class="number">6</span>)  | (<span class="number">3</span>&lt;&lt;<span class="number">2</span>));     <span class="comment">/* RGB I/F, RGB Parallel format,  */</span></span><br><span class="line">	VIDCON0 |= ((<span class="number">3</span>&lt;&lt;<span class="number">6</span>) | (<span class="number">1</span>&lt;&lt;<span class="number">4</span>) );      <span class="comment">/* vclk== HCLK / (CLKVAL+1) = 133/15 = 9MHz (S70=33.3M)*/</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">	VIDCON1 |= (<span class="number">1</span>&lt;&lt;<span class="number">7</span>);   <span class="comment">/* 在vclk的下降沿获取数据(S70上升沿）*/</span></span><br><span class="line">	VIDCON1 |= ((<span class="number">1</span>&lt;&lt;<span class="number">6</span>) | (<span class="number">1</span>&lt;&lt;<span class="number">5</span>));  <span class="comment">/* HSYNC高电平有效, VSYNC高电平有效 （S70相同）*/</span></span><br><span class="line"></span><br><span class="line">	VIDTCON0 = (VBPD &lt;&lt; <span class="number">16</span>) | (VFPD &lt;&lt; <span class="number">8</span>) | (VSPW &lt;&lt; <span class="number">0</span>);  <span class="comment">/*S70:1≤ VSPW+1 ≤20,VSPW+1+VBPD+1=23 */</span></span><br><span class="line">	VIDTCON1 = (HBPD &lt;&lt; <span class="number">16</span>) | (HFPD &lt;&lt; <span class="number">8</span>) | (HSPW &lt;&lt; <span class="number">0</span>);  <span class="comment">/*LINEVAL+1=480,VFPD+1=(7~22~147)*/</span></span><br><span class="line">	VIDTCON2 = (LINEVAL &lt;&lt; <span class="number">11</span>) | (HOZVAL &lt;&lt; <span class="number">0</span>);           <span class="comment">/*1≤HSPW+1≤40，HSPW+1+HBPD+1=46,HOZVAL+1=800，HFPD+1=(16~210~354)*/</span></span><br><span class="line"></span><br><span class="line">	WINCON0 &amp;= ~(<span class="number">0xf</span> &lt;&lt; <span class="number">2</span>);</span><br><span class="line">	WINCON0 |= (<span class="number">0xb</span>&lt;&lt;<span class="number">2</span>) | (<span class="number">1</span>&lt;&lt;<span class="number">0</span>);    <span class="comment">/* unpacked 24 BPP (non-palletized R:8-G:8-B:8 ) */</span></span><br><span class="line"></span><br><span class="line">	VIDOSD0A = (LeftTopX&lt;&lt;<span class="number">11</span>) | (LeftTopY &lt;&lt; <span class="number">0</span>);</span><br><span class="line">	VIDOSD0B = ((RightBotX+<span class="number">1</span>)&lt;&lt;<span class="number">11</span>) | ((RightBotY+<span class="number">1</span>) &lt;&lt; <span class="number">0</span>);</span><br><span class="line">	VIDOSD0C = (LINEVAL + <span class="number">1</span>) * (HOZVAL + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	VIDW00ADD0B0 = FRAME_BUFFER;<span class="comment">/*分配显存*/</span></span><br><span class="line">	VIDW00ADD1B0 =  (((HOZVAL + <span class="number">1</span>)*<span class="number">4</span> + <span class="number">0</span>) * (LINEVAL + <span class="number">1</span>)) &amp; (<span class="number">0xffffff</span>);</span><br><span class="line">	                                <span class="comment">/* VBASEL = VBASEU + (LINEWIDTH+OFFSIZE) x (LINEVAL+1) </span></span><br><span class="line"><span class="comment">                          *        = 0 + (480*4 + 0) * 272</span></span><br><span class="line"><span class="comment">                          *    S70:= 0 + (800*4 + 0) * 480</span></span><br><span class="line"><span class="comment">	                     */</span></span><br><span class="line">	VIDW00ADD2 =  HOZVAL + <span class="number">1</span>;</span><br><span class="line">	fb_base_addr = FRAME_BUFFER;</span><br><span class="line">	xsize = HOZVAL + <span class="number">1</span>;</span><br><span class="line">	ysize = LINEVAL + <span class="number">1</span>;</span><br><span class="line">	bpp   = <span class="number">24</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backlight_enable</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	GPFDAT |= (<span class="number">1</span>&lt;&lt;<span class="number">15</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backlight_disable</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	GPFDAT &amp;= ~(<span class="number">1</span>&lt;&lt;<span class="number">15</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lcd_on</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	GPEDAT |= (<span class="number">1</span>&lt;&lt;<span class="number">0</span>);</span><br><span class="line">	<span class="comment">/* 等待10 frame */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lcd_off</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	GPEDAT &amp;= ~(<span class="number">1</span>&lt;&lt;<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">displaycon_on</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	VIDCON0 |= <span class="number">0x3</span>;</span><br><span class="line">	WINCON0 |= <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">displaycon_off</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	VIDCON0 &amp;= ~<span class="number">0x3</span>;</span><br><span class="line">	WINCON0 &amp;= ~<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lcd_enable</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/* 打开背光 */</span></span><br><span class="line">	<span class="comment">/* 使能LCD本身 */</span></span><br><span class="line">	<span class="comment">/* 使能display controller */</span></span><br><span class="line">	ARM1Wire_SET_Backlight(<span class="number">100</span>);</span><br><span class="line">	lcd_on();</span><br><span class="line">	displaycon_on();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lcd_disable</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/* 关闭背光 */</span></span><br><span class="line">	<span class="comment">/* 关闭LCD本身 */</span></span><br><span class="line">	<span class="comment">/* 关闭display controller */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw_line</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	DrawLine(<span class="number">0</span>,<span class="number">0</span>, <span class="number">0</span>,<span class="number">479</span>, <span class="number">0xff0000</span>);</span><br><span class="line">	DrawLine(<span class="number">0</span>,<span class="number">0</span>, <span class="number">779</span>,<span class="number">0</span>, <span class="number">0x00ff00</span>);</span><br><span class="line">	DrawLine(<span class="number">0</span>,<span class="number">0</span>, <span class="number">779</span>,<span class="number">479</span>, <span class="number">0x00ffff</span>);</span><br><span class="line">	DrawLine(<span class="number">0</span>,<span class="number">479</span>, <span class="number">779</span>,<span class="number">479</span>, <span class="number">0xff00ff</span>);</span><br><span class="line">	DrawLine(<span class="number">779</span>,<span class="number">479</span>, <span class="number">779</span>,<span class="number">0</span>, <span class="number">0xffff00</span>);</span><br><span class="line">	DrawLine(<span class="number">0</span>,<span class="number">240</span>, <span class="number">779</span>,<span class="number">240</span>, <span class="number">0x0123ff</span>);</span><br><span class="line">	DrawLine(<span class="number">400</span>,<span class="number">0</span>, <span class="number">400</span>,<span class="number">479</span>, <span class="number">0x0567ff</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FONTDATAMAX 1152000              </span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> gImage_F[FONTDATAMAX];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">display_red</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">volatile</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> *p = (<span class="keyword">volatile</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> *)FRAME_BUFFER;</span><br><span class="line">	<span class="keyword">int</span> x, y;</span><br><span class="line">	<span class="keyword">int</span> cnt = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> (y = <span class="number">0</span>; y &lt;= LINEVAL; y++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (x = <span class="number">0</span>; x &lt;= HOZVAL; x++)</span><br><span class="line">		&#123;</span><br><span class="line">			p[cnt++] =<span class="number">0xFF00FF</span>;  <span class="comment">/* red */</span></span><br><span class="line">	<span class="comment">//		p[cnt++] =(gImage_F[i]&lt;&lt;16) + (gImage_F[i+1]&lt;&lt;8) +(gImage_F[i+2]);</span></span><br><span class="line">	</span><br><span class="line">		<span class="comment">//	i+=3;</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">*******onewire.c********</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"s3c6410_addr.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"soc_cfg.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 1</span></span><br><span class="line"><span class="comment">//#define TINT_CSTAT_REG  __REG(0x7F006044)</span></span><br><span class="line"><span class="comment">//#define rGPFCON GPFCON_REG</span></span><br><span class="line"><span class="comment">//#define rGPFDAT GPFDAT_REG</span></span><br><span class="line"><span class="comment">//#define rTCNTB3 TCNTB3_REG</span></span><br><span class="line"><span class="comment">//#define rTINT_CSTAT TINT_CSTAT_REG</span></span><br><span class="line"><span class="comment">//#define rTCON TCON_REG</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TINT_CSTAT_INTMASK(n) ( (n&amp;0x1FU))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TIMER3_PENDING_CLEAR (1U&lt;&lt;8)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TIMER3_INTERRUPT_ENABLE (1&lt;&lt;3)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SYS_TIMER_PRESCALER 2</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SYS_TIMER_DIVIDER 1</span></span><br><span class="line"><span class="comment">//#define S3C6410_PCLK (get_PCLK())</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SAMPLE_BPS 9600</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> REQ_INFO          0x60U</span></span><br><span class="line"><span class="comment">//extern ulong   get_PCLK (void);</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">set_pin_as_input</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> tmp;</span><br><span class="line">    tmp = rGPFCON;</span><br><span class="line">    tmp &amp;= ~(<span class="number">3U</span> &lt;&lt; <span class="number">30</span>);</span><br><span class="line">    rGPFCON = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">set_pin_as_output</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> tmp;</span><br><span class="line">    tmp = rGPFCON;</span><br><span class="line">    tmp = (tmp &amp; ~(<span class="number">3U</span> &lt;&lt; <span class="number">30</span>)) | (<span class="number">1U</span> &lt;&lt; <span class="number">30</span>);</span><br><span class="line">    rGPFCON = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">set_pin_value</span><span class="params">(<span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> tmp;</span><br><span class="line">    tmp = rGPFDAT;</span><br><span class="line">    <span class="keyword">if</span> (v) &#123;</span><br><span class="line">        tmp |= (<span class="number">1</span> &lt;&lt; <span class="number">15</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        tmp &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">15</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    rGPFDAT = tmp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">get_pin_value</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> v;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> tmp;</span><br><span class="line">    tmp = rGPFDAT;</span><br><span class="line">    v = !!(tmp &amp; (<span class="number">1</span> &lt;&lt; <span class="number">15</span>));</span><br><span class="line">    <span class="keyword">return</span> v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">InitTimer</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    rTCNTB3 = (S3C6410_PCLK / SYS_TIMER_PRESCALER / SYS_TIMER_DIVIDER / SAMPLE_BPS - <span class="number">1</span>);</span><br><span class="line">    rTINT_CSTAT = TINT_CSTAT_INTMASK(rTINT_CSTAT) | TIMER3_PENDING_CLEAR;</span><br><span class="line">    rTINT_CSTAT = TINT_CSTAT_INTMASK(rTINT_CSTAT) | TIMER3_INTERRUPT_ENABLE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">StartTimer</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    rTCON &amp;= ~(<span class="number">0xf</span> &lt;&lt; <span class="number">16</span>);    <span class="comment">// Timer3 Stop</span></span><br><span class="line">    rTCON |= (<span class="number">1</span> &lt;&lt; <span class="number">17</span>);    <span class="comment">// update TCNTB3</span></span><br><span class="line">    rTCON &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">17</span>);</span><br><span class="line">    rTCON |= ((<span class="number">1</span> &lt;&lt; <span class="number">19</span>) | (<span class="number">1</span> &lt;&lt; <span class="number">16</span>));    <span class="comment">// AutoReload mode, Timer3 Start</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">StopTimer</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> tcon;</span><br><span class="line">    tcon = rTCON;</span><br><span class="line">    tcon &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">16</span>);</span><br><span class="line">    rTCON = tcon;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">WaitTimerTick</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> ((rTINT_CSTAT &amp; (<span class="number">1U</span> &lt;&lt; <span class="number">8</span>)) == <span class="number">0</span>) ;</span><br><span class="line">    rTINT_CSTAT = TINT_CSTAT_INTMASK(rTINT_CSTAT) | TIMER3_PENDING_CLEAR;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> <span class="title">crc8</span><span class="params">(<span class="keyword">unsigned</span> v, <span class="keyword">unsigned</span> len)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">OneWireSession</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> req, <span class="keyword">unsigned</span> <span class="keyword">char</span> res[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> Req;</span><br><span class="line">    <span class="keyword">unsigned</span> *Res;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> i;</span><br><span class="line">    Req = (req &lt;&lt; <span class="number">24</span>) | (crc8(req &lt;&lt; <span class="number">24</span>, <span class="number">8</span>) &lt;&lt; <span class="number">16</span>);</span><br><span class="line">    Res = (<span class="keyword">unsigned</span> *)res;</span><br><span class="line">    set_pin_value(<span class="number">1</span>);</span><br><span class="line">    set_pin_as_output();</span><br><span class="line">    StartTimer();</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">60</span>; i++) &#123;</span><br><span class="line">        WaitTimerTick();</span><br><span class="line">    &#125;</span><br><span class="line">    set_pin_value(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">        WaitTimerTick();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> v = !!(Req &amp; (<span class="number">1U</span> &lt;&lt; <span class="number">31</span>));</span><br><span class="line">        Req &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">        set_pin_value(v);</span><br><span class="line">        WaitTimerTick();</span><br><span class="line">    &#125;</span><br><span class="line">    WaitTimerTick();</span><br><span class="line">    set_pin_as_input();</span><br><span class="line">    WaitTimerTick();</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">32</span>; i++) &#123;</span><br><span class="line">        (*Res) &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">        (*Res) |= get_pin_value();</span><br><span class="line">        WaitTimerTick();</span><br><span class="line">    &#125;</span><br><span class="line">    StopTimer();</span><br><span class="line">    set_pin_value(<span class="number">1</span>);</span><br><span class="line">    set_pin_as_output();</span><br><span class="line">    <span class="keyword">return</span> crc8(*Res, <span class="number">24</span>) == res[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">TryOneWireSession</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> req, <span class="keyword">unsigned</span> <span class="keyword">char</span> res[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (OneWireSession(req, res)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitOneWire</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    InitTimer();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">GetInfo</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> *Lcd, <span class="keyword">unsigned</span> <span class="keyword">short</span> *FirmwareVer)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> res[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">if</span> (!TryOneWireSession(REQ_INFO, res)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    *Lcd = res[<span class="number">3</span>];</span><br><span class="line">    *FirmwareVer = res[<span class="number">2</span>] * <span class="number">100</span> + res[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">SetBacklightOfLCD</span><span class="params">(<span class="keyword">unsigned</span> Brightness)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> res[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="keyword">if</span> (Brightness &gt; <span class="number">127</span>) &#123;</span><br><span class="line">        Brightness = <span class="number">127</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ret = TryOneWireSession(Brightness | <span class="number">0x80</span>U, res);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> <span class="title">crc8</span><span class="params">(<span class="keyword">unsigned</span> v, <span class="keyword">unsigned</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> crc = <span class="number">0xAC</span>U;</span><br><span class="line">    <span class="keyword">while</span> (len--) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((crc &amp; <span class="number">0x80</span>U) != <span class="number">0</span>) &#123;</span><br><span class="line">            crc &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">            crc ^= <span class="number">0x7</span>U;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            crc &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ((v &amp; (<span class="number">1U</span> &lt;&lt; <span class="number">31</span>)) != <span class="number">0</span>) &#123;</span><br><span class="line">            crc ^= <span class="number">0x7</span>U;</span><br><span class="line">        &#125;</span><br><span class="line">        v &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> crc;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ARM1Wire_SET_Backlight</span><span class="params">(<span class="keyword">unsigned</span> Brightness)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//InitOneWire();</span></span><br><span class="line">    SetBacklightOfLCD(Brightness);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> level    ((3770-317)/(480))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> vertical ((3839-192)/(272))</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ARM1Wire_GET_XY</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> res[<span class="number">4</span>];</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span> x,y,x1,y1;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> pressed;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span>  ts_status;</span><br><span class="line">    </span><br><span class="line">    ret = TryOneWireSession(<span class="number">0x40</span>U, res);</span><br><span class="line">    y =  ((res[<span class="number">3</span>] &gt;&gt;   <span class="number">4U</span>) &lt;&lt; <span class="number">8U</span>) + res[<span class="number">2</span>];</span><br><span class="line">    x =  ((res[<span class="number">3</span>] &amp;  <span class="number">0xF</span>U) &lt;&lt; <span class="number">8U</span>) + res[<span class="number">1</span>];</span><br><span class="line">    </span><br><span class="line">    pressed = (x != <span class="number">0xFFF</span>U) &amp;&amp; (y != <span class="number">0xFFF</span>U);</span><br><span class="line">    x1= ((x<span class="number">-200</span>)*<span class="number">480</span>/(<span class="number">3880</span><span class="number">-200</span>));</span><br><span class="line">    y1= ((<span class="number">3772</span>-y)*<span class="number">272</span>/(<span class="number">3772</span><span class="number">-324</span>));</span><br><span class="line">    <span class="comment">//ts_status=((x1 &lt;&lt; 16) | (y1)) | (pressed &lt;&lt; 31);</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"ADx: %04d  , ADy: %04d ,pressed: %04d\n"</span>,x1,y1,pressed);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<h4 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h4><p>地址在这里：<br><a href="http://www.arm9home.net/job.php?action-download-pid-tpc-tid-160971-aid-7067.html" target="_blank" rel="noopener">tiny6410</a></p>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2016/09/27/开发/嵌入式/s3c6410/17-uboot-study-点亮lcd和一线触摸/" target="_blank" title="17-uboot-study-点亮lcd和一线触摸">砦龑堃</a></b>及出处<b><a href="/2016/09/27/开发/嵌入式/s3c6410/17-uboot-study-点亮lcd和一线触摸/" target="_blank" title="17-uboot-study-点亮lcd和一线触摸">http://ykzhai.top/2016/09/27/开发/嵌入式/s3c6410/17-uboot-study-点亮lcd和一线触摸/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《17-uboot-study-点》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/开发/">开发</a>, <a href="/categories/开发/嵌入式/">嵌入式</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/原创/">原创</a>, <a href="/tags/S3C6410/">S3C6410</a>, <a href="/tags/国嵌/">国嵌</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2016/09/27/开发/嵌入式/s3c6410/17-uboot-study-点亮lcd和一线触摸/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "17-uboot-study-点亮lcd和一线触摸"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

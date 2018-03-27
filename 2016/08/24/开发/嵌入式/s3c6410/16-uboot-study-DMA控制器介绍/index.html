@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>16 uboot study DMA控制器介绍 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="16 uboot study DMA控制器介绍"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2016-08-24T08:58:39.000Z"><a href="/2016/08/24/开发/嵌入式/s3c6410/16-uboot-study-DMA控制器介绍/">2016-08-24</a></time>
+        
+  
+    <h1 class="title">16 uboot study DMA控制器介绍</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#DMA-简介"><span class="toc-number">1.</span> <span class="toc-text">DMA 简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S3C6410的DMAC"><span class="toc-number">2.</span> <span class="toc-text">S3C6410的DMAC</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使能一个DMA通道的步骤"><span class="toc-number">3.</span> <span class="toc-text">使能一个DMA通道的步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#寄存器描述"><span class="toc-number">4.</span> <span class="toc-text">寄存器描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#简单代码分析"><span class="toc-number">5.</span> <span class="toc-text">简单代码分析</span></a></li></ol>
+    </div>
+
+        <h4 id="DMA-简介"><a href="#DMA-简介" class="headerlink" title="DMA 简介"></a>DMA 简介</h4><p>DMA (Direct Memory Access ,直接内存存取)是比一种效率比较高的系统内部的一种数据传输方式，在系统运行时经常需要从一个地址空间拷贝大量数据到另一个地址空间，每次拷贝都需要占用cpu大量的时间，不能够去执行其他的工作，而DMA控制器就是为了解决这个问题，当需要拷贝数据时，cpu只要告诉DMA控制器源地址，目标地址，拷贝大小这些参数后就可以去做其他事情了，DMA会接管相关总线，去完成数据拷贝的工作。当DMA完成传输工作后，会通知CPU来进行处理。这样就大大提高了CPU的工作效率。<br><a id="more"></a></p>
+<h4 id="S3C6410的DMAC"><a href="#S3C6410的DMAC" class="headerlink" title="S3C6410的DMAC"></a>S3C6410的DMAC</h4><p>S3C6410 包括4个DMA控制器，每个DMA控制器有8个传输通道，DMA控制器的每个通道都能够无限制的在AXI SYSTEM 总线和AXI PERIPHERAL 总线之间通过AHBtoAXI 桥路传输数据。换句话说，每个通道能够应用在下面的场合：</p>
+<ul>
+<li>1 源和目标都在SYSTEM总线上</li>
+<li>2 源在SYSTEM总线但目标在PERIPHREAL 总线</li>
+<li>3 源在PERIPHREAL总线但是目标在SYSTEM总线</li>
+<li>4 源和目标都在PERIPHREAL总线上</li>
+</ul>
+<p>DMA的主要优势就是在没有CPU的干涉下也能进行数据传输，DMA传输操作可以被软件或硬件驱动，或者是内部外设的请求，或者是外部引脚的请求。<br>一些特性：</p>
+<ul>
+<li>4个 DMA 控制器，每个含8个通道，每个通道支持一个单向传输</li>
+<li>每个DMA控制器提供16个外围DMA请求</li>
+<li>每个外设能够请求一个突发模式或单次模式的DMA请求，突发模式大小在DMAC寄存器设置</li>
+<li>支持内存到内存，内存到外设，外设到内存，外设到外设四种请求</li>
+<li>使用链表支持分散或者聚集的DMA请求</li>
+<li>硬件DMA优先级区分，每个通道都有固定的优先级，从Chanal 0到Chanal 7 优先级依次降低</li>
+<li>源或目标源地址自动递增或非递增</li>
+<li>可编程的突发模式的数据大小，通常为FIFO的一般</li>
+<li>每个通道4个字的FIFO</li>
+<li>支持8,16,32bit 宽度传输</li>
+<li>分离的DMA 错误和DMA 总数中断请求，一个中断能够通过DMA 错误或者DMA count达到0 产生（通常意味着传输完成）</li>
+<li>中断屏蔽</li>
+<li>原始中断状态</li>
+</ul>
+<p><img src="16-uboot-study-DMA控制器介绍/1.png" alt="block"></p>
+<p>S3C6410 支持64个DMA 源，四个DMA控制器分为安全DMA控制器和通用DMA控制器两种，通过系统控制模块中的SDMA_SEL寄存器进行选择，64个DMA源如下表：<br><img src="16-uboot-study-DMA控制器介绍/2.png" alt="source"></p>
+<h4 id="使能一个DMA通道的步骤"><a href="#使能一个DMA通道的步骤" class="headerlink" title="使能一个DMA通道的步骤"></a>使能一个DMA通道的步骤</h4><ul>
+<li>1、决定使用安全DMA控制器还是通用DMA控制器，若要使用通用的DMA控制器，关闭系统控制器的安全DMA控制寄存器（SDMA_SEL），复位值是SDMAC</li>
+<li>2、选择一个符合优先级要求的空闲的DMA通道 Chanal 0 到Chanal 7 优先级从高到低</li>
+<li>3、清空通道中断挂起寄存器和错误寄存器 DMACIntTCClr 和 DMACIntErrClr </li>
+<li>4、写源地址到源地址寄存器 DMACCxSrcAddr </li>
+<li>5、写目的地址到目标地址寄存器 DMACCxDestAddr </li>
+<li>6、写下次链接地址到DMACCxLLI寄存器，如果传输包含一个单数据包，则必须写入这个寄存器</li>
+<li>7、编程DMACCxControl 寄存器填写控制信息</li>
+<li>8、编程通道配置信息到DMACCxConfiguration 寄存器，如果使能位被设置，则DMA通道会自动使能</li>
+</ul>
+<h4 id="寄存器描述"><a href="#寄存器描述" class="headerlink" title="寄存器描述"></a>寄存器描述</h4><p>四个DMA控制器被命名为DMAC0，DMAC1，SDMAC0,SDMAC1,寄存器基地址分别为0x7500_0000,0x7510_0000,0x7DB0_0000和0x7DC0_0000。<br><img src="16-uboot-study-DMA控制器介绍/3.png" alt="reg"><br><img src="16-uboot-study-DMA控制器介绍/4.png" alt="reg"><br><img src="16-uboot-study-DMA控制器介绍/5.png" alt="reg"></p>
+<ul>
+<li>中断状态寄存器<br>中断状态寄存器 DMACIntStatus 是一个只读的用来指示屏蔽后的中断状态的寄存器，某位为高表示一个特定的DMA通道中断请求是激活的，请求能够被错误或终端计数中断请求产生。<br><img src="16-uboot-study-DMA控制器介绍/6.png" alt=""></li>
+<li>终端计数中断状态寄存器<br><img src="16-uboot-study-DMA控制器介绍/7.png" alt=""></li>
+<li>终端计数请求清零寄存器<br><img src="16-uboot-study-DMA控制器介绍/8.png" alt=""></li>
+<li>错误中断状态寄存器<br><img src="16-uboot-study-DMA控制器介绍/9.png" alt=""></li>
+<li>错误中断状态清零<br><img src="16-uboot-study-DMA控制器介绍/10.png" alt=""></li>
+<li>原始终端计数中断寄存器<br><img src="16-uboot-study-DMA控制器介绍/11.png" alt=""></li>
+<li>原始错误中断状态寄存器<br><img src="16-uboot-study-DMA控制器介绍/12.png" alt=""></li>
+<li>通道使能状态寄存器<br><img src="16-uboot-study-DMA控制器介绍/13.png" alt=""></li>
+<li>Burst请求寄存器<br><img src="16-uboot-study-DMA控制器介绍/14.png" alt=""></li>
+<li>Single请求寄存器<br><img src="16-uboot-study-DMA控制器介绍/15.png" alt=""></li>
+<li>DMACConfiguration 使能寄存器<br><img src="16-uboot-study-DMA控制器介绍/16.png" alt=""></li>
+<li>同步寄存器<br><img src="16-uboot-study-DMA控制器介绍/17.png" alt=""></li>
+<li>源地址寄存器<br><img src="16-uboot-study-DMA控制器介绍/18.png" alt=""></li>
+<li>目标地址寄存器<br><img src="16-uboot-study-DMA控制器介绍/19.png" alt=""></li>
+<li>链接表寄存器<br><img src="16-uboot-study-DMA控制器介绍/20.png" alt=""></li>
+<li>通道控制寄存器0<br><img src="16-uboot-study-DMA控制器介绍/21.png" alt=""><br><img src="16-uboot-study-DMA控制器介绍/22.png" alt=""><br><img src="16-uboot-study-DMA控制器介绍/23.png" alt=""></li>
+<li>通道控制寄存器1<br><img src="16-uboot-study-DMA控制器介绍/24.png" alt=""></li>
+<li>通道配置寄存器<br><img src="16-uboot-study-DMA控制器介绍/26.png" alt=""><br><img src="16-uboot-study-DMA控制器介绍/27.png" alt=""></li>
+<li>通道配置寄存器-额外<br><img src="16-uboot-study-DMA控制器介绍/28.png" alt=""><h4 id="简单代码分析"><a href="#简单代码分析" class="headerlink" title="简单代码分析"></a>简单代码分析</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">S3C6410中DMA操作步骤：</span></span><br><span class="line"><span class="comment">1、决定使用安全DMAC(SDMAC)还是通用DMAC(DMAC)；</span></span><br><span class="line"><span class="comment">2、开启DMAC控制，设置DMAC_Configuration寄存器；</span></span><br><span class="line"><span class="comment">3、清除传输结束中断寄存器和错误中断寄存器；</span></span><br><span class="line"><span class="comment">4、选择合适的优先级通道；</span></span><br><span class="line"><span class="comment">5、设置通道的源数据地址和目的数据地址（设置DMACC_SrcAddr和DMACC_DestAddr）；</span></span><br><span class="line"><span class="comment">6、设置通道控制寄存器0（设置DMACC_Control0）；</span></span><br><span class="line"><span class="comment">7、设置通道控制寄存器1,（传输大小，设置DMACC_Control1）；</span></span><br><span class="line"><span class="comment">8、设置通道配置寄存器；（设置DMACC_Configuration）</span></span><br><span class="line"><span class="comment">9、使能相应通道（设置DMACC_Configuratoin）；</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> SDMA_SEL      			(*((volatile unsigned long *)0x7E00F110))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACIntTCClear      	(*((volatile unsigned long *)0x7DB00008))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACIntErrClr      		(*((volatile unsigned long *)0x7DB00010))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACConfiguration      	(*((volatile unsigned long *)0x7DB00030))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACSync     			(*((volatile unsigned long *)0x7DB00034))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACC0SrcAddr     		(*((volatile unsigned long *)0x7DB00100))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACC0DestAddr     		(*((volatile unsigned long *)0x7DB00104))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACC0Control0      	(*((volatile unsigned long *)0x7DB0010c))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACC0Control1      	(*((volatile unsigned long *)0x7DB00110))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DMACC0Configuration     (*((volatile unsigned long *)0x7DB00114))</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UTXH0      		(volatile unsigned long *)0x7F005020</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> src[<span class="number">100</span>] = <span class="string">"\n\rHello World-&gt; This is a test!\n\r"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dma_init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//DMA控制器的选择（SDMAC0）</span></span><br><span class="line">	SDMA_SEL = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">/* 如果外设的工作时钟与DMA控制器的时钟不相同, 要使能"同步逻辑" */</span></span><br><span class="line">	DMACSync = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//DMA控制器使能</span></span><br><span class="line">	DMACConfiguration = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//初始化源地址</span></span><br><span class="line">	DMACC0SrcAddr = (<span class="keyword">unsigned</span> <span class="keyword">int</span>)src;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	<span class="comment">//初始化目的地址</span></span><br><span class="line">	DMACC0DestAddr = (<span class="keyword">unsigned</span> <span class="keyword">int</span>)UTXH0;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//对控制寄存器进行配置</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	源地址自增</span></span><br><span class="line"><span class="comment">	目的地址固定、</span></span><br><span class="line"><span class="comment">	目标主机选择AHB主机2</span></span><br><span class="line"><span class="comment">	源主机选择AHB主机1</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	DMACC0Control0 =(<span class="number">1</span>&lt;&lt;<span class="number">25</span>) | (<span class="number">1</span> &lt;&lt; <span class="number">26</span>)| (<span class="number">1</span>&lt;&lt;<span class="number">31</span>);</span><br><span class="line">	DMACC0Control1 = <span class="number">0x64</span>;     <span class="comment">//传输的大小</span></span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	流控制和传输类型：MTP 为 001</span></span><br><span class="line"><span class="comment">	目标外设：DMA_UART0_1，源外设：DMA_MEM</span></span><br><span class="line"><span class="comment">	通道有效: 1</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	DMACC0Configuration = (<span class="number">1</span>&lt;&lt;<span class="number">6</span>) | (<span class="number">1</span>&lt;&lt;<span class="number">11</span>) | (<span class="number">1</span>&lt;&lt;<span class="number">14</span>) | (<span class="number">1</span>&lt;&lt;<span class="number">15</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dma_start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//开启channel0 DMA</span></span><br><span class="line">	DMACC0Configuration  = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2016/08/24/开发/嵌入式/s3c6410/16-uboot-study-DMA控制器介绍/" target="_blank" title="16 uboot study DMA控制器介绍">砦龑堃</a></b>及出处<b><a href="/2016/08/24/开发/嵌入式/s3c6410/16-uboot-study-DMA控制器介绍/" target="_blank" title="16 uboot study DMA控制器介绍">http://ykzhai.top/2016/08/24/开发/嵌入式/s3c6410/16-uboot-study-DMA控制器介绍/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《16 uboot study D》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/开发/">开发</a>, <a href="/categories/开发/嵌入式/">嵌入式</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/原创/">原创</a>, <a href="/tags/S3C6410/">S3C6410</a>, <a href="/tags/国嵌/">国嵌</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2016/08/24/开发/嵌入式/s3c6410/16-uboot-study-DMA控制器介绍/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "16 uboot study DMA控制器介绍"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

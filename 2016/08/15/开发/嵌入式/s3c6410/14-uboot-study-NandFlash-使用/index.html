@@ -1,0 +1,474 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>14.uboot study NandFlash 使用 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="14.uboot study NandFlash 使用"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2016-08-15T08:05:49.000Z"><a href="/2016/08/15/开发/嵌入式/s3c6410/14-uboot-study-NandFlash-使用/">2016-08-15</a></time>
+        
+  
+    <h1 class="title">14.uboot study NandFlash 使用</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#NandFlash-简介"><span class="toc-number">1.</span> <span class="toc-text">NandFlash 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#分类"><span class="toc-number">1.0.1.</span> <span class="toc-text">分类</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#内部结构"><span class="toc-number">1.0.2.</span> <span class="toc-text">内部结构</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#编址方式"><span class="toc-number">1.0.3.</span> <span class="toc-text">编址方式</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#信号引脚"><span class="toc-number">1.0.4.</span> <span class="toc-text">信号引脚</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#命令设置"><span class="toc-number">1.0.5.</span> <span class="toc-text">命令设置</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#NandFlash使用流程-读，写，擦除"><span class="toc-number">1.0.6.</span> <span class="toc-text">NandFlash使用流程 读，写，擦除</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S3C6410-NandFlash-Controler"><span class="toc-number">2.</span> <span class="toc-text">S3C6410 NandFlash Controler</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#控制寄存器：-使能-片选等控制信号"><span class="toc-number">2.0.1.</span> <span class="toc-text">控制寄存器： 使能,片选等控制信号</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#地址寄存器，数据寄存器，命令寄存器"><span class="toc-number">2.0.2.</span> <span class="toc-text">地址寄存器，数据寄存器，命令寄存器</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#状态寄存器-主要是看NANDFlash状态是繁忙还是已准备好"><span class="toc-number">2.0.3.</span> <span class="toc-text">状态寄存器:主要是看NANDFlash状态是繁忙还是已准备好</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码实现"><span class="toc-number">3.</span> <span class="toc-text">代码实现</span></a></li></ol>
+    </div>
+
+        <ul>
+<li>NandFlash 简介<ul>
+<li>内部结构<a id="more"></a></li>
+<li>编址方式</li>
+<li>信号引脚</li>
+<li>命令设置</li>
+</ul>
+</li>
+<li>S3c6410 NCONF</li>
+<li>代码实现</li>
+<li><a href="http://blog.csdn.net/u013937069/article/details/51997211" target="_blank" rel="noopener">参考链接</a><h4 id="NandFlash-简介"><a href="#NandFlash-简介" class="headerlink" title="NandFlash 简介"></a>NandFlash 简介</h4>对于嵌入式设备来说，NandFlash就相当于电脑中硬盘的作用，我们的代码和数据都存储在上面。</li>
+</ul>
+<h6 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h6><ul>
+<li>SLC (Single level cell): 单层式存储  每个存储单元存一位数据</li>
+<li><p>MLC (multi level cell): 多层式存储    每个存储单元存两位数据</p>
+<p>  |分类|价格|寿命|速度|功耗|<br>  |—|—|—|—|<br>  |SLC|高|10万|快3倍|低|<br>  |MLC|低|1万|慢|高15%|</p>
+</li>
+</ul>
+<h6 id="内部结构"><a href="#内部结构" class="headerlink" title="内部结构"></a>内部结构</h6><p>NandFlash分为块（Block）和页（Pages），如下图：<br><img src="14-uboot-study-NandFlash-使用/nand.png" alt="nand"><br>上图是开发板所采用的Flash芯片的datasheet里面的框图，总共大小为256M<br>每页分为main区和spare区，main去用来存保存的数据，spare存储一些附加信息，比如坏块的标记，ECC校验和等，此处所用的Nandflash的main区有2K大小，还有64个Bytes的spare区，每块有64页，共有128KPages，总共有256MByte的存储空间</p>
+<h6 id="编址方式"><a href="#编址方式" class="headerlink" title="编址方式"></a>编址方式</h6><p>与内存的编址方式不同，NandFlash的编址方式为独立编址，内存属于统一编址，占据了cpu的地址空间，而NandFlash有自己的地址空间，并不占用CPU的地址空间。NandFlash的地址分为行地址与列地址，行地址即为页地址，列地址为页内偏移。下面是寻址所用的周期数，前两个周期发送列地址，后三个周期发送行地址，总共需要5个周期发送地址。<br><img src="14-uboot-study-NandFlash-使用/addr.png" alt="addr"></p>
+<h6 id="信号引脚"><a href="#信号引脚" class="headerlink" title="信号引脚"></a>信号引脚</h6><p><img src="14-uboot-study-NandFlash-使用/pin.png" alt="pin"><br>引脚如上图所示，NandFlash总共有IO0~IO7八个IO口，数据，命令，和地址都需要这8个IO口来进行传输</p>
+<ul>
+<li>CLE，ALE  ：命令，地址使能引脚，代表当前传输的数据是地址还是命令</li>
+<li>CE，RE，WE ：片选，读写使能引脚，低有效</li>
+<li>WP，R/B: 保护使能引脚，准备、忙状态引脚，可以得知NandFlash的工作状态</li>
+</ul>
+<h6 id="命令设置"><a href="#命令设置" class="headerlink" title="命令设置"></a>命令设置</h6><p><img src="14-uboot-study-NandFlash-使用/command.png" alt="command"></p>
+<h6 id="NandFlash使用流程-读，写，擦除"><a href="#NandFlash使用流程-读，写，擦除" class="headerlink" title="NandFlash使用流程 读，写，擦除"></a>NandFlash使用流程 读，写，擦除</h6><p><img src="14-uboot-study-NandFlash-使用/write.png" alt="write"><br><img src="14-uboot-study-NandFlash-使用/read.png" alt="read"></p>
+<h4 id="S3C6410-NandFlash-Controler"><a href="#S3C6410-NandFlash-Controler" class="headerlink" title="S3C6410 NandFlash Controler"></a>S3C6410 NandFlash Controler</h4><p><img src="14-uboot-study-NandFlash-使用/6410.png" alt="6410"><br>如上图，为S3C6410的Nand Flash Controller 与NandFlash的接口框图，将对应的引脚与NandFlash进行连接<br>使用之前，首先要对相关的寄存器进行配置，圈出来的是常用的，剩下的是与ECC校验相关的寄存器相关的寄存器如下:<br><img src="14-uboot-study-NandFlash-使用/register.png" alt="register"></p>
+<p>######　配置寄存器： 这里主要设置TACLS，TWRPH0，TWRPH1 时序参数和ECC配置<br><img src="14-uboot-study-NandFlash-使用/NFCONF.png" alt="NFCONF"></p>
+<h6 id="控制寄存器：-使能-片选等控制信号"><a href="#控制寄存器：-使能-片选等控制信号" class="headerlink" title="控制寄存器： 使能,片选等控制信号"></a>控制寄存器： 使能,片选等控制信号</h6><p><img src="14-uboot-study-NandFlash-使用/control.png" alt="CONTROL"></p>
+<h6 id="地址寄存器，数据寄存器，命令寄存器"><a href="#地址寄存器，数据寄存器，命令寄存器" class="headerlink" title="地址寄存器，数据寄存器，命令寄存器"></a>地址寄存器，数据寄存器，命令寄存器</h6><p><img src="14-uboot-study-NandFlash-使用/misc.png" alt="misc"></p>
+<h6 id="状态寄存器-主要是看NANDFlash状态是繁忙还是已准备好"><a href="#状态寄存器-主要是看NANDFlash状态是繁忙还是已准备好" class="headerlink" title="状态寄存器:主要是看NANDFlash状态是繁忙还是已准备好"></a>状态寄存器:主要是看NANDFlash状态是繁忙还是已准备好</h6><p><img src="14-uboot-study-NandFlash-使用/stat.png" alt="stat"></p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><p>前面我们代码搬移的时候是从steppingstone中搬移到内存中的，实际上正确的应该是从NandFlash 中搬移到内存中，因此需要重写代码搬移的函数，在代码搬移之前，需要先进行NandFlash的初始化。<br>下面是NandFlash简单驱动文件nand.c,没有进行ECC校验，无法保证数据正确<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">tiny6410用的nandflash为 一页2K</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NFCONF             (*((volatile unsigned long*)0x70200000))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NFCONT             (*((volatile unsigned long*)0x70200004))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NFCMMD             (*((volatile unsigned char*)0x70200008))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NFSTAT             (*((volatile unsigned char*)0x70200028))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NFADDR             (*((volatile unsigned char*)0x7020000c))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NFDATA             (*((volatile unsigned char*)0x70200010))</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">select_ship</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   NFCONT &amp;= ~(<span class="number">1</span>&lt;&lt;<span class="number">1</span>);	<span class="comment">//CE引脚接到了ncs[2] 这个引脚上</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delselect_ship</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    NFCONT |= (<span class="number">1</span>&lt;&lt;<span class="number">1</span>); <span class="comment">//CE</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clean_RnB</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    NFSTAT |= (<span class="number">1</span>&lt;&lt;<span class="number">4</span>);</span><br><span class="line">&#125; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">nand_cmd</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> cmd)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    NFCMMD = cmd;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">wait_RnB</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(!(NFSTAT &amp; <span class="number">0x1</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">nand_addr</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> addr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    NFADDR = addr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">nand_reset</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* 选中 */</span></span><br><span class="line">    select_ship();</span><br><span class="line">   </span><br><span class="line">    <span class="comment">/* 清除RnB */</span></span><br><span class="line">    clean_RnB();</span><br><span class="line">	    </span><br><span class="line">    <span class="comment">/* 发出复位信号 */</span></span><br><span class="line">    nand_cmd(<span class="number">0xff</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="comment">/* 等待就绪 */</span></span><br><span class="line">    wait_RnB();</span><br><span class="line">   </span><br><span class="line">    <span class="comment">/* 取消选中 */</span></span><br><span class="line">    delselect_ship();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">nand_init</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 设置时间参数 */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TACLS  7</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TWRPH0 7</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TWRPH1 7</span></span><br><span class="line">    </span><br><span class="line">    NFCONF &amp;= ~((<span class="number">7</span>&lt;&lt;<span class="number">12</span>)|(<span class="number">7</span>&lt;&lt;<span class="number">8</span>)|(<span class="number">7</span>&lt;&lt;<span class="number">4</span>));</span><br><span class="line">    NFCONF |= (TACLS&lt;&lt;<span class="number">12</span>)|(TWRPH0&lt;&lt;<span class="number">8</span>)|(TWRPH1&lt;&lt;<span class="number">4</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="comment">/* 使能 nandflash controller*/</span></span><br><span class="line">    NFCONT = <span class="number">1</span> | (<span class="number">1</span>&lt;&lt;<span class="number">1</span>);</span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line">   <span class="comment">/* 复位 */</span></span><br><span class="line">   nand_reset();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">NF_PageRead</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> addr,<span class="keyword">unsigned</span> <span class="keyword">char</span>* buff)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">   </span><br><span class="line">   </span><br><span class="line">    <span class="comment">/* 选中芯片 */</span></span><br><span class="line">    select_ship();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* 清除RnB */</span></span><br><span class="line">    clean_RnB();</span><br><span class="line">   </span><br><span class="line">    <span class="comment">/* 发出命令0x00 */</span></span><br><span class="line">     nand_cmd(<span class="number">0x00</span>);</span><br><span class="line">       </span><br><span class="line">     <span class="comment">/* 发出列地址 */</span></span><br><span class="line">    nand_addr(<span class="number">0x00</span>);</span><br><span class="line">    nand_addr(<span class="number">0x00</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 发出行地址 */</span></span><br><span class="line">   nand_addr(addr&amp;<span class="number">0xff</span>);</span><br><span class="line">   nand_addr((addr &gt;&gt;<span class="number">8</span> ) &amp; (<span class="number">0xff</span>));</span><br><span class="line">   nand_addr((addr &gt;&gt;<span class="number">16</span> ) &amp; (<span class="number">0xff</span>));</span><br><span class="line">       </span><br><span class="line">   <span class="comment">/* 发出命令0x30 */</span></span><br><span class="line">    nand_cmd(<span class="number">0x30</span>);</span><br><span class="line">       </span><br><span class="line">   <span class="comment">/* 等待就绪 */</span></span><br><span class="line">    wait_RnB();</span><br><span class="line">       </span><br><span class="line">   <span class="comment">/* 读数据 */</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i&lt;<span class="number">1024</span>*<span class="number">2</span>; i++)</span><br><span class="line">   &#123;</span><br><span class="line">   	*buff++ = NFDATA;</span><br><span class="line">   &#125;</span><br><span class="line">       </span><br><span class="line">     </span><br><span class="line">    <span class="comment">/* 取消片选 */</span></span><br><span class="line">    </span><br><span class="line">    delselect_ship();</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">nand_to_ram</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> start_addr,<span class="keyword">unsigned</span> <span class="keyword">char</span>* sdram_addr,<span class="keyword">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   	<span class="keyword">int</span> i;</span><br><span class="line">	   	</span><br><span class="line"><span class="keyword">for</span>( i=(start_addr &gt;&gt;<span class="number">11</span>); size&gt;<span class="number">0</span>;)</span><br><span class="line">&#123;</span><br><span class="line">    NF_PageRead(i,sdram_addr);	</span><br><span class="line">    size -= <span class="number">2048</span>;</span><br><span class="line">    sdram_addr += <span class="number">2048</span>;</span><br><span class="line">    i++;</span><br><span class="line">&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">NF_Erase</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> addr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> ret;</span><br><span class="line"></span><br><span class="line"><span class="comment">//选中flash芯片</span></span><br><span class="line">select_ship();</span><br><span class="line"></span><br><span class="line"><span class="comment">//清除RnB</span></span><br><span class="line">clean_RnB();</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送命令60</span></span><br><span class="line">nand_cmd(<span class="number">0x60</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送行地址（3个周期）</span></span><br><span class="line">nand_addr(addr&amp;<span class="number">0xff</span>);</span><br><span class="line">   	nand_addr((addr &gt;&gt;<span class="number">8</span> ) &amp; (<span class="number">0xff</span>));</span><br><span class="line">   	nand_addr((addr &gt;&gt;<span class="number">16</span> ) &amp; (<span class="number">0xff</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送命令D0</span></span><br><span class="line">nand_cmd(<span class="number">0xD0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//等待RnB</span></span><br><span class="line">wait_RnB();</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送命令70</span></span><br><span class="line">nand_cmd(<span class="number">0x70</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//读取擦除结果</span></span><br><span class="line">ret = NFDATA;</span><br><span class="line"></span><br><span class="line"><span class="comment">//取消选中flash芯片</span></span><br><span class="line">delselect_ship();</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">NF_WritePage</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> addr,<span class="keyword">unsigned</span> <span class="keyword">char</span>* buff)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> ret,i;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//选中flash芯片</span></span><br><span class="line">	select_ship();</span><br><span class="line"></span><br><span class="line">	<span class="comment">//清除RnB</span></span><br><span class="line">	clean_RnB();</span><br><span class="line"></span><br><span class="line">	<span class="comment">//发送命令80</span></span><br><span class="line">	nand_cmd(<span class="number">0x80</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//发送列地址（2个周期）</span></span><br><span class="line">	nand_addr(<span class="number">0x00</span>);</span><br><span class="line">    	nand_addr(<span class="number">0x00</span>);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//发送行地址（3个周期）</span></span><br><span class="line">	nand_addr(addr&amp;<span class="number">0xff</span>);</span><br><span class="line">   	nand_addr((addr &gt;&gt;<span class="number">8</span> ) &amp; (<span class="number">0xff</span>));</span><br><span class="line">   	nand_addr((addr &gt;&gt;<span class="number">16</span> ) &amp; (<span class="number">0xff</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入数据</span></span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">1024</span>*<span class="number">2</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		NFDATA = buff[i];	</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送命令10</span></span><br><span class="line">nand_cmd(<span class="number">0x10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//等待RnB</span></span><br><span class="line">wait_RnB();</span><br><span class="line"></span><br><span class="line"><span class="comment">//发送命令70</span></span><br><span class="line">nand_cmd(<span class="number">0x70</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//读取写入结果</span></span><br><span class="line">ret = NFDATA;</span><br><span class="line"></span><br><span class="line"><span class="comment">//取消选中flash芯片</span></span><br><span class="line">delselect_ship();</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于以前是从steppingstone中搬移代码到内存，现在更改为从flash中，新改的start.s文件如下，只有改动部分<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">reset:</span><br><span class="line">	bl set_svc</span><br><span class="line">	bl set_peri_port</span><br><span class="line">	bl disable_watchdog</span><br><span class="line">	bl disable_interrupt</span><br><span class="line">	bl disable_mmu</span><br><span class="line">	bl init_clock</span><br><span class="line">	bl mem_init</span><br><span class="line">	bl init_stack  <span class="comment">//由于要跳转到c语言中运行，先要设置堆栈，进行堆栈初始化</span></span><br><span class="line">	bl nand_init  <span class="comment">//copy 到内存之前，要先进行flash的初始化</span></span><br><span class="line"></span><br><span class="line">	bl copy_to_ram <span class="comment">//跳转到去拷贝代码</span></span><br><span class="line">	bl clean_bss</span><br><span class="line">	ldr pc, =gboot_main</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">copy_to_ram:</span><br><span class="line">	mov r0,#<span class="number">0</span> </span><br><span class="line">	ldr r1,=_start</span><br><span class="line">	ldr r2,=bss_end</span><br><span class="line"></span><br><span class="line">	sub r2,r2,r1</span><br><span class="line">	mov ip,lr        <span class="comment">//调用之前先保存当前的lr指针，后面要恢复的 ip寄存器是r12寄存器</span></span><br><span class="line">	bl nand_to_ram  <span class="comment">//这里牵扯到汇编调用c函数的参数传递，r0，r1,r2,分别为函数的第1,2,3个参数，正好对应读flash函数的flash开始地址r0=0，目标地址r1=0x50008000和复制大小r2=bss_end - _start=整个代码的大小	</span></span><br><span class="line">	mov lr,ip</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	mov pc,lr</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">init_stack:</span><br><span class="line">       msr cpsr_c, #<span class="number">0xd2</span></span><br><span class="line">       ldr sp, =<span class="number">0x53000000</span> <span class="comment">//初始化r13_irq</span></span><br><span class="line">       msr cpsr_c, #<span class="number">0xd3</span></span><br><span class="line">	ldr sp, =<span class="number">0x54000000</span>  <span class="comment">//初始化R13_svc</span></span><br><span class="line">	mov pc ,lr</span><br></pre></td></tr></table></figure></p>
+<p>下面是主程序，main.c 首先写入了一些数据，然后读出来判断数据是否正确<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> buf[<span class="number">1024</span>*<span class="number">2</span>];</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> MMU_ON</span></span><br><span class="line">   	mmu_init();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">	</span><br><span class="line">led_init();</span><br><span class="line">button_init();</span><br><span class="line">init_irq();</span><br><span class="line"> </span><br><span class="line">led_off();</span><br><span class="line"></span><br><span class="line">NF_Erase(<span class="number">128</span>*<span class="number">1</span>+<span class="number">1</span>);</span><br><span class="line">buf[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line">NF_WritePage(<span class="number">128</span>*<span class="number">1</span>+<span class="number">1</span>,buf);</span><br><span class="line">   </span><br><span class="line">buf[<span class="number">0</span>] = <span class="number">10</span>;</span><br><span class="line">NF_PageRead(<span class="number">128</span>*<span class="number">1</span>+<span class="number">1</span>,buf);</span><br><span class="line">   </span><br><span class="line"><span class="keyword">if</span>( buf[<span class="number">0</span>] == <span class="number">100</span> )</span><br><span class="line">	led_on();</span><br><span class="line">	</span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">   </span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure></p>
+
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2016/08/15/开发/嵌入式/s3c6410/14-uboot-study-NandFlash-使用/" target="_blank" title="14.uboot study NandFlash 使用">砦龑堃</a></b>及出处<b><a href="/2016/08/15/开发/嵌入式/s3c6410/14-uboot-study-NandFlash-使用/" target="_blank" title="14.uboot study NandFlash 使用">http://ykzhai.top/2016/08/15/开发/嵌入式/s3c6410/14-uboot-study-NandFlash-使用/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《14.uboot study N》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/开发/">开发</a>, <a href="/categories/开发/嵌入式/">嵌入式</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/原创/">原创</a>, <a href="/tags/S3C6410/">S3C6410</a>, <a href="/tags/国嵌/">国嵌</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2016/08/15/开发/嵌入式/s3c6410/14-uboot-study-NandFlash-使用/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "14.uboot study NandFlash 使用"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>9.uboot study 内存初始化 | 砦龑堃</title>
+  <meta name="author" content="砦龑堃">
+  
+  <meta name="description" content="技术宅，挨踢男，等等">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="9.uboot study 内存初始化"/>
+  <meta property="og:site_name" content="砦龑堃"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  <link rel="alternate" href="/atom.xml" title="砦龑堃" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <!-- wumiiVerification -->
+  <meta name="wumiiVerification" content="fb50a101-84fe-4ca2-91a7-ae8cf792978b" />
+  <meta name="wumiiVerification" content="d73b5866-c390-4156-a4dd-51b526b5335e" />
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Font-Awesome -->
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <style  type="text/css">
+		html,body{ 
+			
+		}
+		
+		canvas{
+			display:block;
+			vertical-align:bottom;
+		}
+		#particles-js{
+			position:fixed;
+			height: 100%;
+			width: 100%;
+			left:0;
+			right:0;
+			top:0; 
+			bottom:0;
+			z-index: -1;
+			background-color: #FFF;
+		}
+	</style>
+
+</head>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+<body>
+  <header id="header"><div class= "header-content inner">
+	<div class = "alignleft col-one">
+		
+			<div class='avatar'>
+				<img src = "/me.jpg">
+              </div>
+		
+		<div class="header-div">
+		    <h1><a href="/">砦龑堃</a></h1>
+		    <h2><a href="/">人生如戏，戏如人生</a></h2>
+		</div>
+	</div>
+	<div class = "alignright col-two">
+		
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class= "header-nav">
+	<div class='header-nav-content inner'>
+		<div id="main-nav" class="alignleft">
+		    		
+		    		  <a href="/"><i class="fa fa-home"></i>首页</a>
+		    		
+		    		  <a href="/archives"><i class="fa fa-archive"></i>归档</a>
+		    		
+		    		  <a href="/about"><i class="fa fa-user"></i>关于</a>
+		    		
+		</div>
+		<div id="sub-nav" class="alignright">
+		    
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+</header>
+  
+    <div id="content" class="inner">
+      <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+        <div class="icon"></div>
+        
+        <time datetime="2016-08-15T06:51:04.000Z"><a href="/2016/08/15/开发/嵌入式/s3c6410/9-uboot-study-内存初始化/">2016-08-15</a></time>
+        
+  
+    <h1 class="title">9.uboot study 内存初始化</h1>
+  
+
+    </header>
+
+    <div class="entry">
+      
+        
+    <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于内存"><span class="toc-number">1.</span> <span class="toc-text">关于内存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#内存的分类"><span class="toc-number">1.0.1.</span> <span class="toc-text">内存的分类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内存的结构"><span class="toc-number">1.0.2.</span> <span class="toc-text">内存的结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内存的容量"><span class="toc-number">1.0.3.</span> <span class="toc-text">内存的容量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内存引脚说明"><span class="toc-number">1.0.4.</span> <span class="toc-text">内存引脚说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#s3c6410-DRAMC初始化流程"><span class="toc-number">2.</span> <span class="toc-text">s3c6410 DRAMC初始化流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Dram控制器进入配置状态"><span class="toc-number">2.1.</span> <span class="toc-text">Dram控制器进入配置状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内存时序参数，id等相关配置"><span class="toc-number">2.2.</span> <span class="toc-text">内存时序参数，id等相关配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#这样就完成了内存参数的设置，下面进行内存初始化流程"><span class="toc-number">2.3.</span> <span class="toc-text">这样就完成了内存参数的设置，下面进行内存初始化流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完成了内存的初始化流程之后，就剩下最后的ready了"><span class="toc-number">2.4.</span> <span class="toc-text">完成了内存的初始化流程之后，就剩下最后的ready了</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码实现如下："><span class="toc-number">3.</span> <span class="toc-text">代码实现如下：</span></a></li></ol>
+    </div>
+
+        <p>内存的初始化相比前面的那些步骤略微的麻烦了些，为了能够比较清楚地说明下内存的初始化，(ps:虽然我也不是特别的清楚),首先简单的说下这篇文章的大概流程：</p>
+<ul>
+<li>1.对内存相关的一些简单介绍<a id="more"></a></li>
+<li>2.s3c6410的内存控制器的初始化流程</li>
+<li>3.对照datasheet说明实现代码的工作流程</li>
+</ul>
+<h2 id="关于内存"><a href="#关于内存" class="headerlink" title="关于内存"></a>关于内存</h2><h4 id="内存的分类"><a href="#内存的分类" class="headerlink" title="内存的分类"></a>内存的分类</h4><p>这里所说的内存仅指RAM(RandomAccessMemory,随机存取存储器),它具有可以随机读写访问的特点，并且存储的数据在断电后会自动消失，现在所用的主要有以下两种类型：</p>
+<ul>
+<li>SRAM ：静态RAM，不需要一直刷新，双稳态电路形式存储数据，集成度较低，体积大，造价高，容量小，通常用作Cache</li>
+<li>DRAM : 动态RAM, 需要不断刷新，通过MOS电容存储电荷来存储数据，结构简单，集成度高，成本低，便于大容量制造,常见的几种DRAM：<ul>
+<li>SDRAM ：Synchronous Dynamic RAM ，同步动态随机存储器，工作频率与系统的频率相同，逐渐被DDR SDRAM所取代  </li>
+<li>DDR SDRAM : Double Data Rate SDRAM 双倍同步动态随机存储器，习惯上称之为DDR，相比SDRAM，速度和容量上有所提升，本质上虽然没有提高时钟频率，但是可以在时钟的上升沿和下降沿同时传输数据，因此其速度是标准SDRAM 的两倍</li>
+<li>mobile DDR ： 相比pC端的DDR，电压更低，封装更小</li>
+</ul>
+</li>
+</ul>
+<h4 id="内存的结构"><a href="#内存的结构" class="headerlink" title="内存的结构"></a>内存的结构</h4><p>内存的内部结构就像表格一样，每一张表格称为一个逻辑BANK,L_BANK,每张表格有若干行地址线和若干列地址线，寻址的时候，首先去找到数据在哪一个bank里面，然后在分别确定行地址和列地址，这样就可以找到需要的数据所在的单元了，由于成本，制造工艺的原因，无法将整个地址空间做到一个bank里面，现在一般都将整个地址空间分为4个L-bank,四个L-bank具有公用的行地址和列地址<br><img src="9-uboot-study-内存初始化/bank.png" alt="bank"></p>
+<h4 id="内存的容量"><a href="#内存的容量" class="headerlink" title="内存的容量"></a>内存的容量</h4><p><img src="9-uboot-study-内存初始化/Ram.png" alt="ram"><br>一般内存容量的表示方法如上图所示，64M表示有多少个存储单元，32表示每个存储单位的容量为多少bit，可以将其换算为Byte，如上图所示的内存容量为64M<em>32bit=64</em>4Byte=256MByte。</p>
+<h4 id="内存引脚说明"><a href="#内存引脚说明" class="headerlink" title="内存引脚说明"></a>内存引脚说明</h4><p><img src="9-uboot-study-内存初始化/rampin.png" alt="rampin"><br>如上图所示，RAM的引脚主要有以下几种：</p>
+<ul>
+<li>电源引脚： 数据电源VDDQ，VSSQ，电源VDD，VSS</li>
+<li>时钟相关引脚： CK 上升沿和下降沿两个，CKE时钟使能引脚</li>
+<li>片选引脚： CS 低有效</li>
+<li>列，行地址，写使能引脚： 列，行地址选中使能，写使能引脚，低有效</li>
+<li>DMx引脚：输入数据屏蔽引脚</li>
+<li>BA0，1：bank选择引脚</li>
+<li>A[n:0]:地址线</li>
+<li>DQ：数据总线</li>
+<li>DQSx：输出数据闸门</li>
+</ul>
+<p>下图是S3c6410 内存端口引脚说明，可以看出与上面的内存芯片的datasheet中的引脚说明正好一一对应<br><img src="9-uboot-study-内存初始化/rampin1.png" alt="rampin1"></p>
+<p>硬件原理图如下图所示：<br><img src="9-uboot-study-内存初始化/ramsch.png" alt="ramsch"></p>
+<hr>
+<p>更多内存相关的知识请找度娘或参考下面的链接<br><a href="http://blog.csdn.net/gumingyaotangwei/article/details/23951799" target="_blank" rel="noopener">终极图解内存上</a><br><a href="http://blog.csdn.net/gumingyaotangwei/article/details/23951929" target="_blank" rel="noopener">终极图解内存下</a></p>
+<h2 id="s3c6410-DRAMC初始化流程"><a href="#s3c6410-DRAMC初始化流程" class="headerlink" title="s3c6410 DRAMC初始化流程"></a>s3c6410 DRAMC初始化流程</h2><p>S3c6410的DRAM 控制器支持SDR SDRAM，mobile SDR SDRAM ，DDR SDRAM，和mobile DDR SDRAM多种类型，根据芯片手册上的描述:<br>DRAM 控制器支持多达两片同样类型的最大256M的内存，所有的内存片都共享同样的引脚，除了时钟使能和片选信号，当上电复位以后，软件必须初始化DRAM控制器和连接到DRAM控制器上的内存，初始化流程需要参考SDRAM datasheet，可供参考的初始化流程如下图，第一张图是DRAM 控制器的初始化流程，第二张图是内存的初始化流程：<br><img src="9-uboot-study-内存初始化/Dram1.png" alt="darm1"><br><img src="9-uboot-study-内存初始化/DRAM2.png" alt="darm2"><br>由于所采用的开发板上的内存芯片为Mobile DDR SDRAM，因此这里只贴出了这种类型的内存初始化流程，先来看下DRAM控制器的初始化流程：</p>
+<ul>
+<li>1.编程memc_cmd 写入’3b100’,使DRAM控制器进入Config （配置）状态</li>
+<li>2.向相关的寄存器中写入内存时序参数，内存片的配置，id配置相关</li>
+<li>3.等待200us，使内存上电和时钟稳定，但是其实当cpu开始工作的时候，内存电源和时钟都已经稳定了</li>
+<li>4.执行内存初始化流程，即下面的流程</li>
+<li>5.编程memc_cmd写入’3b000’,使DRAM控制器进入’Ready‘（准备）状态</li>
+<li>6.检查寄存器memc_stat 内存状态域直到内存状态为’2b01‘，这意味着DRAM控制器已经准备好了</li>
+</ul>
+<p>看完了DRAM控制器的初始化流程，再来看下内存初始化的流程：</p>
+<ul>
+<li>1.编程mem_cmd 在direct_cmd 写入’2b11‘，使DRAM控制器发送’NOP’命令到内存</li>
+<li>2.编程mem_cmd 在direct_cmd 写入’2b00‘，使内存控制器发送’Prechargeall’命令到内存</li>
+<li>3.编程mem_cmd 在direct_cmd 写入‘2b11’,使DRAM控制器发送’Autorefresh’命令到内存</li>
+<li>4.编程mem_cmd 在direct_cmd 写入‘2b11’,使DRAM控制器发送’Autorefresh’命令到内存</li>
+<li>5.编程mem_cmd ‘2b10’在direct_cmd，使DRAM 控制器发送MRS内存命令-EMRS的bank地址一定要设定</li>
+<li>6.编程mem_cmd ‘2b10’在direct_cmd，使DRAM 控制器发送MRS内存命令-MRS的bank地址一定要设定</li>
+</ul>
+<p>接下来按照上面的流程来进行内存的初始化</p>
+<h3 id="Dram控制器进入配置状态"><a href="#Dram控制器进入配置状态" class="headerlink" title="Dram控制器进入配置状态"></a>Dram控制器进入配置状态</h3><p><img src="9-uboot-study-内存初始化/memc_cmd.png" alt="memc_cmd"><br>按照上图的说明，向memc_cmd寄存器中写入100即可</p>
+<h3 id="内存时序参数，id等相关配置"><a href="#内存时序参数，id等相关配置" class="headerlink" title="内存时序参数，id等相关配置"></a>内存时序参数，id等相关配置</h3><ul>
+<li><p>Refresh period 配置<br><img src="9-uboot-study-内存初始化/refresh period.png" alt="refresh"><br>内存刷新周期设置，根据下图内存芯片手册的值，由s3c6410的时钟体系配置，内存使用的为AHB总线时钟，为133Mhz，7.8us对应寄存器的值应为7800*（1000 000 000/133 000 000），此值不是一个整数，最后在加上1，即为寄存器中的值<br><img src="9-uboot-study-内存初始化/data refresh.png" alt="refresh"></p>
+</li>
+<li><p>CAS latency<br><img src="9-uboot-study-内存初始化/cas.png" alt="cas"><br>如下图，内存芯片手册上的数字为2或3，这里设为3<br><img src="9-uboot-study-内存初始化/data cas.png" alt="cas"></p>
+</li>
+<li><p>t_DQSS<br><img src="9-uboot-study-内存初始化/t_dqss.png" alt="t_dqss"><br>如下图，内存芯片手册上的为0.75到1.25之间，这里设为1<br><img src="9-uboot-study-内存初始化/data tdqss.png" alt="t_dqss"></p>
+</li>
+<li><p>t_MRD<br><img src="9-uboot-study-内存初始化/t mrd.png" alt="t_mrd"><br>如下图，内存芯片手册上的为2<br><img src="9-uboot-study-内存初始化/data tmrd.png" alt="t_mrd"></p>
+</li>
+<li><p>t_RAS<br><img src="9-uboot-study-内存初始化/t_ras.png" alt="t_ras"><br>如下图，内存芯片手册上的为40 到70000ns之间,我们大概选个时间就好<br><img src="9-uboot-study-内存初始化/data tras.png" alt="t_ras"></p>
+</li>
+<li><p>t_RC<br><img src="9-uboot-study-内存初始化/t_rc.png" alt="t_rc"></p>
+</li>
+<li>t_RCD<br><img src="9-uboot-study-内存初始化/t_rcd.png" alt="t_rcd"></li>
+<li>t_RFC<br><img src="9-uboot-study-内存初始化/t_rfc.png" alt="t_rfc"></li>
+<li>t_RP<br><img src="9-uboot-study-内存初始化/t_rp.png" alt="t_rp"></li>
+<li>t_RRD<br><img src="9-uboot-study-内存初始化/t_rrd.png" alt="t_rrd"></li>
+<li>t_WR<br><img src="9-uboot-study-内存初始化/t_wr.png" alt="t_wr"></li>
+<li>t_WTR<br><img src="9-uboot-study-内存初始化/t_wtr.png" alt="t_wtr"></li>
+<li>t_XP<br><img src="9-uboot-study-内存初始化/t_xp.png" alt="t_xp"></li>
+<li>t_XSR<br><img src="9-uboot-study-内存初始化/t_xsr.png" alt="t_xsr"></li>
+<li>t_ESR<br><img src="9-uboot-study-内存初始化/t_esr.png" alt="t_esr"></li>
+</ul>
+<p>上面这些时序参数配置大部分在内存芯片手册上都可以找到，只要相应的填进去就好，实在没有的可以参考其它人的代码来写：<br><img src="9-uboot-study-内存初始化/data sheet.png" alt="data"><br><img src="9-uboot-study-内存初始化/data sheet1.png" alt="data"></p>
+<ul>
+<li><p>MEMCFG 寄存器 行列地址，burst length，内存片数量<br><img src="9-uboot-study-内存初始化/memcfg.png" alt="memcfg"><br><img src="9-uboot-study-内存初始化/memcfg1.png" alt="memcfg"><br>这里内存芯片只有一片,芯片手册上相关数据如下：<br><img src="9-uboot-study-内存初始化/data addr.png" alt="data"><br><img src="9-uboot-study-内存初始化/data burst.png" alt="data"></p>
+</li>
+<li><p>MEMCFG2 寄存器 配置，内存类型，数据宽度等信息,这里32bit，mobileDDR内存<br><img src="9-uboot-study-内存初始化/memcfg2.png" alt="memcfg"></p>
+</li>
+<li>chipcfg 配置AXI 内存地址<br><img src="9-uboot-study-内存初始化/chipcfg.png" alt="chipcfg"></li>
+<li>usrcfg 用户寄存器<br><img src="9-uboot-study-内存初始化/usrcfg.png" alt="usrcfg"></li>
+</ul>
+<h3 id="这样就完成了内存参数的设置，下面进行内存初始化流程"><a href="#这样就完成了内存参数的设置，下面进行内存初始化流程" class="headerlink" title="这样就完成了内存参数的设置，下面进行内存初始化流程"></a>这样就完成了内存参数的设置，下面进行内存初始化流程</h3><p><img src="9-uboot-study-内存初始化/directcmd.png" alt="directcmd"></p>
+<ul>
+<li>1、发送NOP命令</li>
+<li>2、发送Prechargeall命令</li>
+<li>3、发送Autofresh</li>
+<li>4、发送Autofresh</li>
+<li>5、发送mrs命令，设置mrs寄存器</li>
+<li>6、发送mrs命令，设置emrs寄存器<br>对于5,6点的内存寄存器的设置需要根据内存芯片手册进行相关配置，如下图：<br><img src="9-uboot-study-内存初始化/data mrs.png" alt="mrs"><br><img src="9-uboot-study-内存初始化/data emrs.png" alt="emrs"></li>
+</ul>
+<h3 id="完成了内存的初始化流程之后，就剩下最后的ready了"><a href="#完成了内存的初始化流程之后，就剩下最后的ready了" class="headerlink" title="完成了内存的初始化流程之后，就剩下最后的ready了"></a>完成了内存的初始化流程之后，就剩下最后的ready了</h3><ul>
+<li>发送ready到memc_cmd 命令000 使DRAM控制器进入ready状态</li>
+<li>检查mem_stat寄存器，检查DRAM控制器是否已经进入ready状态<br><img src="9-uboot-study-内存初始化/memstat.png" alt="memstat"></li>
+</ul>
+<h2 id="代码实现如下："><a href="#代码实现如下：" class="headerlink" title="代码实现如下："></a>代码实现如下：</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">.text</span><br><span class="line">.global mem_init</span><br><span class="line">mem_init:</span><br><span class="line">   </span><br><span class="line">   ldr r0, =<span class="number">0x7e00f120</span></span><br><span class="line">   mov r1, #<span class="number">0x8</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001004</span>  @内存控制命令寄存器</span><br><span class="line">   </span><br><span class="line">   mov r1, #<span class="number">0x4</span>         @根据手册得知需要先进入配置模式</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001010</span>  @刷新寄存器地址</span><br><span class="line">   ldr r1, =( ( <span class="number">7800</span> / ( <span class="number">1000000000</span>/<span class="number">133000000</span> ) + <span class="number">1</span> ) )      @设置刷新时间</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001014</span>  @CAS latency寄存器</span><br><span class="line">   mov r1, #(<span class="number">3</span> &lt;&lt; <span class="number">1</span>)</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001018</span>  @t_DQSS寄存器</span><br><span class="line">   mov r1, #<span class="number">0x1</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e00101c</span>  @T_MRD寄存器</span><br><span class="line">   mov r1, #<span class="number">0x2</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001020</span>   @t_RAS寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">45</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001024</span>   @t_RC寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">68</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001028</span>   @t_RCD寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">23</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e00102c</span>   @t_RFC寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">80</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001030</span>   @t_RP寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">23</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001034</span>   @t_rrd寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">15</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001038</span>   @t_wr寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">15</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line"> @  ldr r2, [r0]</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e00103c</span>   @t_wtr寄存器</span><br><span class="line">   mov r1, #<span class="number">0x07</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001040</span>   @t_xp寄存器</span><br><span class="line">   mov r1, #<span class="number">0x02</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001044</span>   @t_xsr寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">120</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001048</span>   @t_esr寄存器</span><br><span class="line">   ldr r1, =( ( <span class="number">120</span> / ( <span class="number">1000000000</span> / <span class="number">133000000</span> ) + <span class="number">1</span> ) )</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e00100c</span>   @内存控制配置寄存器</span><br><span class="line">   ldr r1, =<span class="number">0x00010012</span>   @配置控制器</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e00104c</span>   @<span class="number">32</span>位DRAM配置控制寄存器</span><br><span class="line">   ldr r1, =<span class="number">0x0b45</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001200</span>   @片选寄存器</span><br><span class="line">   ldr r1, =<span class="number">0x150f8</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001304</span>   @用户配置寄存器</span><br><span class="line">   mov r1, #<span class="number">0x0</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001008</span></span><br><span class="line">   ldr r1, =<span class="number">0x000c0000</span> @nop</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r1, =<span class="number">0x00000000</span> @Prechargeall</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r1, =<span class="number">0x00040000</span> @Autofresh</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r1, =<span class="number">0x000a0000</span> @emrs 寄存器设置</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r1, =<span class="number">0x00080032</span> @mrs 设置</span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">   ldr r0, =<span class="number">0x7e001004</span>  @发送ready命令</span><br><span class="line">   mov r1, #<span class="number">0x0</span></span><br><span class="line">   str r1, [r0]</span><br><span class="line"></span><br><span class="line">check_dmc1_ready: @检测ready命令是否已经完成</span><br><span class="line">   </span><br><span class="line">   ldr r0, =<span class="number">0x7e001000</span> </span><br><span class="line">   ldr r1, [r0]</span><br><span class="line">   mov r2, #<span class="number">0x3</span></span><br><span class="line">   <span class="keyword">and</span> r1, r1, r2</span><br><span class="line">   cmp r1, #<span class="number">0x1</span></span><br><span class="line">   bne check_dmc1_ready</span><br><span class="line">   nop</span><br><span class="line">   mov pc, lr</span><br></pre></td></tr></table></figure>
+		<br><br><br>
+<!-- <HR style="FILTER: alpha(opacity=100,finishopacity=0,style=3)" width="100%" color=#7e7e7e SIZE=1><br>-->
+转载本站原创内容请注明作者<b><a href="/2016/08/15/开发/嵌入式/s3c6410/9-uboot-study-内存初始化/" target="_blank" title="9.uboot study 内存初始化">砦龑堃</a></b>及出处<b><a href="/2016/08/15/开发/嵌入式/s3c6410/9-uboot-study-内存初始化/" target="_blank" title="9.uboot study 内存初始化">http://ykzhai.top/2016/08/15/开发/嵌入式/s3c6410/9-uboot-study-内存初始化/</a></b>
+<br>&nbsp
+		<!-- Donate Module -->
+<div id="donate_module">
+	<!-- css -->
+	<style type="text/css">
+		.donate_bar a.btn_donate{
+			display: inline-block;
+			width: 82px;
+			height: 82px;
+			background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			_background: url("http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif") no-repeat;
+			
+			<!-- 因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+				 为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+				 嵌入其它博客时不一定要它们。 -->
+			-webkit-transition: background 0s;
+			-moz-transition: background 0s;
+			-o-transition: background 0s;
+			-ms-transition: background 0s;
+			transition: background 0s;
+			<!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+		}
+		.donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+		.donate_bar .donate_txt {
+			display: block;
+			color: #9d9d9d;
+			font: 14px/2 "Microsoft Yahei";
+		}
+		.bold{ font-weight: bold; }
+		.center{text-align: center}
+		.hidden{display:none;}
+	</style>
+	<!-- /css -->
+	<!-- form -->
+	<form id="donate" action="https://shenghuo.alipay.com/send/payment/fill.htm" method="POST" target="_blank" accept-charset="GBK">
+		<input name="optEmail" type="hidden" value="ice_he@foxmail.com" />
+		<input name="payAmount" type="hidden" value="1.00" />
+		<input id="title" name="title" type="hidden" value="打赏《9.uboot study 内存》"/>
+		<input name="memo" type="hidden" value="留下您的大名及联系方式(email,blog,etc)，多交流共勉共进：" />
+	</form>
+	<!-- /form -->
+	<!-- btn_donate & tips -->
+	<div id="donate_board" class="donate_bar center">
+		<a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+		<span class="donate_txt">
+			&uarr;<br/>
+			若本文对您有帮助，<span class="bold">求打赏~</span> 谢谢您的鼓励。
+		</span>
+		<br/>
+	</div>
+	<!-- /btn_donate & tips -->
+	<!-- donate guide -->
+	<div id="donate_guide" class="donate_bar center hidden">
+		<a href="/donateAlipay.jpg" title="支付宝扫一扫"  class="fancybox" rel="gallery0">
+			<img src="/donateAlipay.jpg" title="Donate 打赏" height="164px" width="164px"/>
+		</a>
+		<a href="/donateWeiXin.jpg" title="微信扫一扫" class="fancybox" rel="gallery0">
+			<img src="/donateWeiXin.jpg" title="Donate 打赏" height="164px" width="164px" />
+		</a><br/>
+		<span class="donate_txt">
+			用手机 <span class="bold"><a href="https://mobile.alipay.com/index.htm">支付宝钱包</a> / <a href="http://weixin.qq.com/">微信</a></span>，
+			扫一扫即可~ 谢谢您的鼓励。<br/>
+		</span>
+		<br/>
+	</div>
+	<!-- /donate guide -->
+	<!-- donate script -->
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+		function donate_on_web(){
+			$('#donate').submit();
+		}
+	</script>
+	<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/开发/">开发</a>, <a href="/categories/开发/嵌入式/">嵌入式</a>
+  </div>
+
+        
+  <div class="tags">
+    <a href="/tags/原创/">原创</a>, <a href="/tags/S3C6410/">S3C6410</a>, <a href="/tags/国嵌/">国嵌</a>
+  </div>
+
+        <div class = "counter">
+  <span id="busuanzi_container_page_pv" style="display:none">
+      总访问&nbsp<span id="busuanzi_value_page_pv"></span>&nbsp次
+  </span>
+</div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+  
+<section id = "relate">
+	
+                <div id=""></div>
+	
+</section>
+
+
+  
+    <section id="comment">
+    <!--   <h1 class="title">留言</h1> -->
+    
+    
+        <script type="text/javascript" id="wumiiComments">
+            var wumiiPermaLink = "http://ykzhai.top/2016/08/15/开发/嵌入式/s3c6410/9-uboot-study-内存初始化/"; //请用代码生成文章永久的链接
+            var wumiiTitle = "9.uboot study 内存初始化"; //请用代码生成文章标题
+            var wumiiSitePrefix = "http://ykzhai.top"; //        安装无觅评论插件的网站的域名，如果是放在子域名上，请提供子域名，如"http://       blog.wumii.com"。如果这里填写的域名不对，请自行改正。
+            var wumiiCommentParams = "&pf=JAVASCRIPT";
+        </script>
+        <script type="text/javascript" src="http://widget.wumii.cn/ext/cw/widget"></script>
+      
+    </section>
+
+
+
+
+</div></div>
+      <aside id="sidebar" class="alignright">
+  
+<div class="widget tag">
+  <h3 class="title" id="categories">分类</h3>
+     <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/内核/">内核</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/命令/">命令</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统/">系统</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/系统管理/">系统管理</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Module/">Module</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Module/I2C-Bus/">I2C-Bus</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/工具/BinUtils/">BinUtils</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/Make/">Make</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/VIM/">VIM</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/">开发</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/开发/Qt/">Qt</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/开发/嵌入式/">嵌入式</a><span class="category-list-count">17</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/编程/C-C/">C/C++</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/Shell/">Shell</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/">随笔</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/随笔/杂记/">杂记</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/领域/">领域</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/领域/hexo/">hexo</a><span class="category-list-count">3</span></li></ul></li></ul> 
+</div>
+ 
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/Arch/" style="font-size: 12px;">Arch</a> <a href="/tags/C/" style="font-size: 14px;">C++</a> <a href="/tags/FAQ/" style="font-size: 12px;">FAQ</a> <a href="/tags/Linux/" style="font-size: 16px;">Linux</a> <a href="/tags/Qt/" style="font-size: 10px;">Qt</a> <a href="/tags/S3C6410/" style="font-size: 18px;">S3C6410</a> <a href="/tags/Shell/" style="font-size: 12px;">Shell</a> <a href="/tags/hexo/" style="font-size: 12px;">hexo</a> <a href="/tags/i2c/" style="font-size: 10px;">i2c</a> <a href="/tags/ld/" style="font-size: 10px;">ld</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/国嵌/" style="font-size: 18px;">国嵌</a> <a href="/tags/基本命令/" style="font-size: 12px;">基本命令</a> <a href="/tags/实践/" style="font-size: 10px;">实践</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a> <a href="/tags/磁盘管理/" style="font-size: 10px;">磁盘管理</a> <a href="/tags/系统管理/" style="font-size: 10px;">系统管理</a> <a href="/tags/转载/" style="font-size: 14px;">转载</a>
+  </div>
+</div>
+
+
+  
+
+<div class="widget">
+  <h3 class="title">我的微博</h3>
+    <ul class="weibo">
+	<iframe width="100%" height="600" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=600&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=1&isFans=1&uid=5697155622&verifier=4b0a8ef9&dpc=1"></iframe>
+    </ul>
+</div>
+
+  <div class="widget tag">
+  <h3 class="title">日历云</h3>
+  <div id="calendar"></div>
+</div>
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">友情链接</h3>
+      <ul class="entry">
+        
+          <li class='link'><a href='https://www.haomwei.com/'>屠夫</a></li>
+        
+          <li class='link'><a href='http://jxust-cgs.github.io/'>jxust-cgs</a></li>
+        
+      </ul>
+  </div>
+
+
+
+  
+<div class="widget">
+  <h3 class="title">最新评论</h3>
+  	<!-- 多说最新评论 start -->
+	<div class="ds-recent-comments ds-recent-user" data-num-items="5" data-show-avatars="1" data-show-time="1" data-show-title="1" data-show-admin="1" data-excerpt-length="70"></div>
+	<!-- 多说最新评论 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"ykzhai"};
+		(function() {
+			var ds = document.createElement('script');
+			ds.type = 'text/javascript';ds.async = true;
+			ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+			ds.charset = 'UTF-8';
+			(document.getElementsByTagName('head')[0] 
+			 || document.getElementsByTagName('body')[0]).appendChild(ds);
+		})();
+		</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+  
+  <div class="widget tag">
+    <h3 class="title">归档</h3>
+	<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">公元 2017 年</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/">公元 2016 年</a><span class="archive-list-count">28</span></li></ul>
+  </div>
+
+</aside>
+      <div class="clearfix"></div>
+    </div>
+  
+  <footer id="footer"><div class="footer-content inner">
+  <div class="alignleft">
+  
+   	<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/cc4.0.png" title=" " height=20px /></a>
+	 &nbsp;&copy; 
+	2018 砦龑堃
+    
+	
+
+  </div>
+  <div class="alignright">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme
+    <a href="https://github.com/pengloo53/Hexo-theme-light_cn">light_cn</a>
+  </div>
+  
+  <div class="visit">
+    您是来到本站的第<span id="busuanzi_value_site_uv"></span>位小伙伴
+  </div>
+  
+  <div class="clearfix"></div>
+</div></footer>
+  <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+<!-- calendar widget -->
+
+  <script src="/js/calendar.js"></script>
+  <script src="/js/languages.js"></script>
+  <script type="text/javascript">
+    $(function() {
+    
+      $('#calendar').aCalendar('zh-CN',{single:, root:'calendar'});
+    
+    });
+  </script>
+
+
+<!-- 『不蒜子』计数服务 -->
+<script async src="http://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- wumii关联推荐 -->
+<script type="text/javascript" src="http://widget.wumii.cn/ext/relatedItemsWidget"></script>
+
+<!-- 百度推荐 -->
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?48fd0f879ff6b13d0e7b7f60fa502565";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+<!-- 返回顶部 -->
+<div id="toTop">
+	<a href="#">▲</a>
+	<a href="#footer">▼</a>
+</div>
+
+<!-- 站内搜索-Swiftype -->
+<!-- <script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+  
+  _st('install','sC-iNFrvTTNtiXEVNwo1','2.0.0');
+</script> -->
+
+<!-- fancybox -->
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+  <div id="particles-js"></div>
+  <script src="/js/particles.js"></script>
+  <script src="/js/particlesconfig.js"></script>
+</body>
+</html>
