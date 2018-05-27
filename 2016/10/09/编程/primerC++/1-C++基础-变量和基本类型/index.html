@@ -137,10 +137,94 @@
 <li>浮点数</li>
 </ul>
 </li>
-<li><p>空类型（void）</p>
-<a id="more"></a>
-<h4 id="算术类型"><a href="#算术类型" class="headerlink" title="算术类型"></a>算术类型</h4><p>|类型|说明|最小尺寸|测试尺寸|<br>|—–|—–|——|—-|<br>|bool |布尔类型（true、false）|未定义|1 Byte|<br>|char| 字符| 1 Byte|1 Byte|<br>|wchar_t| 宽字符|2 Byte|4 Byte|<br>|char16_t|Unicode 字符|2 Byte|未测试|<br>|char32_t|Unicode 字符|4 Byte|未测试|<br>|short| 短整型|2 Byte|2 Byte|<br>|int| 整型|2 Byte|4 Byte|<br>|long |长整型|4 Byte|8 Byte|<br>|long long |长整型（C++ 11）|8 Byte|8 Byte|<br>|float| 单精度浮点数| 6位有效数字|4 Byte，一般7位有效数字|<br>|double|双精度浮点数|10位有效数字|8 Byte，一般16位有效数字|<br>|long double|扩展精度浮点数|10 位有效数字|16 Byte，具体实现不同精度不同|</p>
-</li>
+<li>空类型（void）<a id="more"></a>
+<h4 id="算术类型"><a href="#算术类型" class="headerlink" title="算术类型"></a>算术类型</h4></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>最小尺寸</th>
+<th>测试尺寸</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bool</td>
+<td>布尔类型（true、false）</td>
+<td>未定义</td>
+<td>1 Byte</td>
+</tr>
+<tr>
+<td>char</td>
+<td>字符</td>
+<td>1 Byte</td>
+<td>1 Byte</td>
+</tr>
+<tr>
+<td>wchar_t</td>
+<td>宽字符</td>
+<td>2 Byte</td>
+<td>4 Byte</td>
+</tr>
+<tr>
+<td>char16_t</td>
+<td>Unicode 字符</td>
+<td>2 Byte</td>
+<td>未测试</td>
+</tr>
+<tr>
+<td>char32_t</td>
+<td>Unicode 字符</td>
+<td>4 Byte</td>
+<td>未测试</td>
+</tr>
+<tr>
+<td>short</td>
+<td>短整型</td>
+<td>2 Byte</td>
+<td>2 Byte</td>
+</tr>
+<tr>
+<td>int</td>
+<td>整型</td>
+<td>2 Byte</td>
+<td>4 Byte</td>
+</tr>
+<tr>
+<td>long</td>
+<td>长整型</td>
+<td>4 Byte</td>
+<td>8 Byte</td>
+</tr>
+<tr>
+<td>long long</td>
+<td>长整型（C++ 11）</td>
+<td>8 Byte</td>
+<td>8 Byte</td>
+</tr>
+<tr>
+<td>float</td>
+<td>单精度浮点数</td>
+<td>6位有效数字</td>
+<td>4 Byte，一般7位有效数字</td>
+</tr>
+<tr>
+<td>double</td>
+<td>双精度浮点数</td>
+<td>10位有效数字</td>
+<td>8 Byte，一般16位有效数字</td>
+</tr>
+<tr>
+<td>long double</td>
+<td>扩展精度浮点数</td>
+<td>10 位有效数字</td>
+<td>16 Byte，具体实现不同精度不同</td>
+</tr>
+</tbody>
+</table>
+<ul>
 <li><p>带符号类型和无符号类型</p>
 <ul>
 <li>int、short、long、 long long都是带符号的，通过类型前面添加unsigned 得到无符号类型，如 unsigned int，可以缩写为unsigned。</li>
@@ -157,7 +241,7 @@
 </ul>
 </li>
 </ul>
-<h4 id="类型转换浅谈"><a href="#类型转换浅谈" class="headerlink" title="类型转换浅谈"></a>类型转换浅谈</h4><p>当在程序中我们使用一种类型而其实对象应该取另一种类型时，程序会自动进行类型转换，当我们像下面这样把一种算术类型的值赋给另外一种类型时：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> b=<span class="number">42</span>; <span class="comment">//b 位true</span></span><br><span class="line"><span class="keyword">int</span> i= b; <span class="comment">//i 为1</span></span><br><span class="line">i =<span class="number">3.14</span> ; <span class="comment">//i 为3</span></span><br><span class="line"><span class="keyword">double</span> pi=i ;<span class="comment">//pi 为3.0</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> c =<span class="number">-1</span>； <span class="comment">//char 占一个字节时，c 值为255</span></span><br><span class="line"><span class="keyword">signed</span> <span class="keyword">char</span> c2=<span class="number">256</span> ;<span class="comment">//char 占一个字节时， c 未定义</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="类型转换浅谈"><a href="#类型转换浅谈" class="headerlink" title="类型转换浅谈"></a>类型转换浅谈</h4><p>当在程序中我们使用一种类型而其实对象应该取另一种类型时，程序会自动进行类型转换，当我们像下面这样把一种算术类型的值赋给另外一种类型时：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> b=<span class="number">42</span>; <span class="comment">//b 位true</span></span><br><span class="line"><span class="keyword">int</span> i= b; <span class="comment">//i 为1</span></span><br><span class="line">i =<span class="number">3.14</span> ; <span class="comment">//i 为3</span></span><br><span class="line"><span class="keyword">double</span> pi=i ;<span class="comment">//pi 为3.0</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> c =<span class="number">-1</span>； <span class="comment">//char 占一个字节时，c 值为255</span></span><br><span class="line"><span class="keyword">signed</span> <span class="keyword">char</span> c2=<span class="number">256</span> ;<span class="comment">//char 占一个字节时， c2 未定义</span></span><br></pre></td></tr></table></figure></p>
 <p>类型所能表示的值得范围决定了转换的过程：</p>
 <ul>
 <li>非布尔类型赋值给布尔类型时，初始值为0 ，结果为false ，否则结果为true。</li>
